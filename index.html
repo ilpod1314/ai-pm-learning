@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI客服产品经理 · 6个月成长路径</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<style>
+:root{
+  --pri:#1677FF;--pri-d:#0958D9;--pri-l:#E6F4FF;--pri-l2:#BAE0FF;
+  --suc:#52C41A;--suc-l:#F6FFED;--warn:#FAAD14;--warn-l:#FFFBE6;
+  --err:#FF4D4F;--err-l:#FFF2F0;
+  --bg:#F0F2F5;--card:#FFFFFF;
+  --t1:#1D2129;--t2:#4E5969;--t3:#86909C;--t4:#C9CDD4;
+  --border:#E5E6EB;--border2:#F2F3F5;
+  --ph1-bg:#E6F4FF;--ph1-bd:#91CAFF;--ph1-t:#0958D9;
+  --ph2-bg:#FFF7E6;--ph2-bd:#FFD591;--ph2-t:#D46B08;
+  --ph3-bg:#F0F5FF;--ph3-bd:#ADC6FF;--ph3-t:#1D39C4;
+  --radius:8px;--radius-l:12px;
+  --shadow:0 2px 8px rgba(0,0,0,.08);--shadow-m:0 4px 16px rgba(0,0,0,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:-apple-system,'PingFang SC','Helvetica Neue',Arial,sans-serif;font-size:14px;color:var(--t1);background:var(--bg);line-height:1.6}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+
+/* ─── Layout ─── */
+#app{display:flex;flex-direction:column;min-height:100vh}
+.top-bar{background:var(--card);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:0;position:sticky;top:0;z-index:100;box-shadow:var(--shadow)}
+.top-brand{font-size:16px;font-weight:700;color:var(--pri);white-space:nowrap;padding-right:32px;border-right:1px solid var(--border2)}
+.top-nav{display:flex;flex:1;overflow-x:auto}
+.top-nav-item{padding:16px 16px;font-size:13px;color:var(--t3);border-bottom:2px solid transparent;white-space:nowrap;transition:.2s;font-weight:500}
+.top-nav-item:hover{color:var(--pri)}
+.top-nav-item.active{color:var(--pri);border-bottom-color:var(--pri)}
+.page{display:none;padding:24px;max-width:1200px;margin:0 auto;width:100%}
+.page.active{display:block}
+
+/* ─── Cards ─── */
+.card{background:var(--card);border-radius:var(--radius-l);padding:20px;box-shadow:var(--shadow)}
+.card+.card{margin-top:16px}
+.card-title{font-size:15px;font-weight:600;color:var(--t1);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title .icon{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:12px;background:var(--pri-l);color:var(--pri)}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+
+/* ─── Dashboard ─── */
+.dash-hero{background:linear-gradient(135deg,var(--pri) 0%,var(--pri-d) 100%);border-radius:var(--radius-l);padding:28px 32px;color:#fff;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.dash-hero h1{font-size:22px;font-weight:700;margin-bottom:6px}
+.dash-hero p{font-size:13px;opacity:.85}
+.dash-meta{text-align:right}
+.dash-meta .big-num{font-size:36px;font-weight:800;line-height:1}
+.dash-meta small{font-size:12px;opacity:.8}
+.stat-card{background:var(--card);border-radius:var(--radius-l);padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+.stat-num{font-size:28px;font-weight:700;color:var(--pri)}
+.stat-label{font-size:12px;color:var(--t3)}
+.progress-wrap{background:var(--bg);border-radius:4px;height:8px;overflow:hidden}
+.progress-bar{height:100%;border-radius:4px;background:var(--pri);transition:.4s}
+.progress-bar.ph1{background:#1677FF}
+.progress-bar.ph2{background:#FAAD14}
+.progress-bar.ph3{background:#722ED1}
+
+/* Phase cards */
+.phase-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+.phase-card{border-radius:var(--radius-l);padding:20px;border:1px solid}
+.phase-card.p1{background:var(--ph1-bg);border-color:var(--ph1-bd)}
+.phase-card.p2{background:var(--ph2-bg);border-color:var(--ph2-bd)}
+.phase-card.p3{background:var(--ph3-bg);border-color:var(--ph3-bd)}
+.phase-card h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.phase-card.p1 h3{color:var(--ph1-t)}
+.phase-card.p2 h3{color:var(--ph2-t)}
+.phase-card.p3 h3{color:var(--ph3-t)}
+.phase-card p{font-size:12px;color:var(--t2);margin-bottom:12px}
+.phase-card .mini-progress{background:rgba(255,255,255,.6);border-radius:4px;height:6px;overflow:hidden;margin-top:8px}
+.phase-card .mini-bar{height:100%;border-radius:4px;transition:.4s}
+.p1 .mini-bar{background:var(--ph1-t)}
+.p2 .mini-bar{background:var(--ph2-t)}
+.p3 .mini-bar{background:var(--ph3-t)}
+
+/* ─── Weekly Plan ─── */
+.week-filter{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{padding:6px 16px;border-radius:20px;font-size:13px;border:1px solid var(--border);color:var(--t2);transition:.2s}
+.filter-btn:hover{border-color:var(--pri);color:var(--pri)}
+.filter-btn.active{background:var(--pri);border-color:var(--pri);color:#fff}
+.week-accordion{display:flex;flex-direction:column;gap:8px}
+.week-block{background:var(--card);border-radius:var(--radius-l);overflow:hidden;box-shadow:var(--shadow)}
+.week-header{display:flex;align-items:center;gap:12px;padding:14px 20px;cursor:pointer;user-select:none}
+.week-header:hover{background:var(--border2)}
+.week-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.ph1-badge{background:var(--ph1-bg);color:var(--ph1-t)}
+.ph2-badge{background:var(--ph2-bg);color:var(--ph2-t)}
+.ph3-badge{background:var(--ph3-bg);color:var(--ph3-t)}
+.week-title{flex:1;font-size:14px;font-weight:600}
+.week-prog{font-size:12px;color:var(--t3);white-space:nowrap}
+.week-chevron{font-size:12px;color:var(--t3);transition:.2s}
+.week-block.open .week-chevron{transform:rotate(180deg)}
+.week-body{display:none;padding:0 20px 16px}
+.week-block.open .week-body{display:block}
+.task-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border2)}
+.task-item:last-child{border-bottom:none}
+.task-cb{width:16px;height:16px;border-radius:4px;border:2px solid var(--t4);flex-shrink:0;margin-top:2px;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px}
+.task-cb.checked{background:var(--suc);border-color:var(--suc)}
+.task-text{font-size:13px;color:var(--t1);line-height:1.5}
+.task-text.done{color:var(--t4);text-decoration:line-through}
+.task-tag{font-size:11px;padding:1px 6px;border-radius:4px;margin-left:6px;white-space:nowrap}
+.tag-must{background:#FFF1F0;color:#FF4D4F}
+.tag-pub{background:#F0F5FF;color:#2F54EB}
+.tag-tool{background:#F6FFED;color:#389E0D}
+.week-deliver{margin-top:12px;padding:12px;background:var(--border2);border-radius:var(--radius);border-left:3px solid var(--pri)}
+.week-deliver h4{font-size:12px;font-weight:600;color:var(--t2);margin-bottom:6px}
+.week-deliver p{font-size:12px;color:var(--t2)}
+
+/* ─── Daily Tracker ─── */
+.daily-top{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.daily-date-input{border:1px solid var(--border);border-radius:var(--radius);padding:8px 14px;font-size:14px;color:var(--t1);outline:none}
+.daily-date-input:focus{border-color:var(--pri);box-shadow:0 0 0 2px rgba(22,119,255,.1)}
+.daily-week-tag{padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600}
+.daily-must{border-left:4px solid var(--pri);background:var(--pri-l);border-radius:0 var(--radius) var(--radius) 0;padding:16px;margin-bottom:12px}
+.daily-must h3{font-size:13px;font-weight:700;color:var(--pri);margin-bottom:8px}
+.daily-extra{border-left:4px solid var(--suc);background:var(--suc-l);border-radius:0 var(--radius) var(--radius) 0;padding:16px;margin-bottom:12px}
+.daily-extra h3{font-size:13px;font-weight:700;color:#389E0D;margin-bottom:8px}
+.daily-brand{border-left:4px solid #722ED1;background:#F9F0FF;border-radius:0 var(--radius) var(--radius) 0;padding:16px}
+.daily-brand h3{font-size:13px;font-weight:700;color:#531DAB;margin-bottom:8px}
+.daily-item{display:flex;align-items:flex-start;gap:10px;padding:6px 0}
+.time-badge{font-size:11px;padding:2px 6px;border-radius:4px;background:rgba(22,119,255,.1);color:var(--pri);white-space:nowrap;flex-shrink:0;margin-top:2px}
+
+/* ─── Resources ─── */
+.res-table{width:100%;border-collapse:collapse}
+.res-table th{background:var(--pri);color:#fff;padding:10px 14px;text-align:left;font-size:13px;font-weight:600}
+.res-table th:first-child{border-radius:var(--radius) 0 0 0}
+.res-table th:last-child{border-radius:0 var(--radius) 0 0}
+.res-table td{padding:10px 14px;border-bottom:1px solid var(--border2);font-size:13px;vertical-align:top}
+.res-table tr:last-child td{border-bottom:none}
+.res-table tr:hover td{background:var(--bg)}
+.res-link{color:var(--pri);text-decoration:none;font-weight:500}
+.res-link:hover{text-decoration:underline}
+.priority-star{color:#FAAD14}
+.res-cat{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.cat-ai{background:#E6F4FF;color:#0958D9}
+.cat-tool{background:#F6FFED;color:#389E0D}
+.cat-biz{background:#FFF7E6;color:#D46B08}
+.cat-data{background:#F9F0FF;color:#531DAB}
+.cat-prod{background:#FFF1F0;color:#CF1322}
+
+/* ─── Radar ─── */
+.radar-wrap{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.radar-chart-box{flex:1;min-width:300px;max-width:400px}
+.radar-sliders{flex:1;min-width:280px}
+.slider-item{margin-bottom:16px}
+.slider-label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+.slider-label span:first-child{color:var(--t1);font-weight:500}
+.slider-label span:last-child{color:var(--pri);font-weight:700;font-size:15px}
+.slider{width:100%;-webkit-appearance:none;height:6px;border-radius:4px;background:var(--border);outline:none;cursor:pointer}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--pri);cursor:pointer;box-shadow:0 2px 4px rgba(22,119,255,.3)}
+.slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--pri);cursor:pointer;border:none}
+.radar-history{margin-top:16px}
+.history-item{display:flex;align-items:center;gap:10px;padding:8px;border-radius:var(--radius);background:var(--bg);margin-bottom:6px}
+.history-dot{width:10px;height:10px;border-radius:50%;background:var(--pri);flex-shrink:0}
+.history-item span{font-size:12px;color:var(--t2)}
+
+/* ─── Portfolio ─── */
+.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.port-card{background:var(--card);border-radius:var(--radius-l);padding:20px;box-shadow:var(--shadow);border:1px solid var(--border);transition:.2s;position:relative}
+.port-card:hover{box-shadow:var(--shadow-m);transform:translateY(-2px)}
+.port-status{position:absolute;top:16px;right:16px;font-size:11px;padding:3px 8px;border-radius:20px;font-weight:600}
+.ps-done{background:var(--suc-l);color:#389E0D}
+.ps-doing{background:var(--warn-l);color:#D46B08}
+.ps-todo{background:var(--bg);color:var(--t3)}
+.port-phase{font-size:11px;margin-bottom:8px;font-weight:600}
+.port-title{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:6px}
+.port-desc{font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:12px}
+.port-link-input{width:100%;border:1px solid var(--border);border-radius:var(--radius);padding:6px 10px;font-size:12px;color:var(--t2);outline:none;transition:.2s}
+.port-link-input:focus{border-color:var(--pri);box-shadow:0 0 0 2px rgba(22,119,255,.1)}
+.port-week{font-size:11px;color:var(--t3);margin-top:8px}
+
+/* ─── Interview Bank ─── */
+.iq-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.iq-item{background:var(--card);border-radius:var(--radius-l);padding:16px 20px;margin-bottom:10px;box-shadow:var(--shadow);display:flex;gap:14px;align-items:flex-start;cursor:pointer;transition:.2s}
+.iq-item:hover{box-shadow:var(--shadow-m)}
+.iq-idx{width:28px;height:28px;border-radius:50%;background:var(--pri-l);color:var(--pri);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.iq-body{flex:1}
+.iq-q{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:6px}
+.iq-a{font-size:12px;color:var(--t2);line-height:1.6;display:none}
+.iq-item.open .iq-a{display:block}
+.iq-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.iq-cat-tag{font-size:11px;padding:2px 8px;border-radius:4px}
+.iq-status-sel{font-size:12px;border:1px solid var(--border);border-radius:4px;padding:3px 8px;outline:none;color:var(--t2);cursor:pointer}
+.status-new{background:#F0F5FF;color:#2F54EB}
+.status-prep{background:#FFF7E6;color:#D46B08}
+.status-ready{background:#F6FFED;color:#389E0D}
+.iq-chevron{font-size:12px;color:var(--t3);transition:.2s;flex-shrink:0;margin-top:4px}
+.iq-item.open .iq-chevron{transform:rotate(180deg)}
+
+/* ─── IQ Follow-ups ─── */
+.iq-followup-section{margin-top:12px;border-top:1px dashed var(--border);padding-top:12px}
+.iq-followup-toggle{font-size:12px;color:var(--pri);background:var(--pri-l);border:1px solid var(--pri-l2);border-radius:20px;padding:4px 14px;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.iq-followup-toggle:hover{background:var(--pri-l2);border-color:var(--pri)}
+.iq-rounds{margin-top:10px;display:flex;flex-direction:column;gap:8px;display:none}
+.iq-followup-section.expanded .iq-rounds{display:flex}
+.iq-followup-section.expanded .iq-followup-toggle .fu-arr{transform:rotate(180deg)}
+.fu-arr{display:inline-block;transition:.2s}
+.iq-round-item{background:var(--bg);border-radius:var(--radius);padding:12px 14px;border-left:3px solid var(--border);cursor:pointer;transition:.2s}
+.iq-round-item:hover{border-left-color:var(--pri-l2)}
+.iq-round-item.open{background:var(--pri-l);border-left-color:var(--pri)}
+.iq-round-header{display:flex;align-items:flex-start;gap:8px}
+.iq-round-label{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:var(--pri);color:#fff;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.iq-round-q{font-size:12px;font-weight:600;color:var(--t1);flex:1;line-height:1.5}
+.iq-round-item.open .iq-round-q{color:var(--pri-d)}
+.iq-round-a{font-size:12px;color:var(--t2);line-height:1.7;margin-top:10px;padding-top:10px;border-top:1px solid var(--pri-l2);display:none}
+.iq-round-item.open .iq-round-a{display:block}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--t4);border-radius:4px}
+
+/* ─── Responsive ─── */
+@media(max-width:768px){
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .phase-overview{grid-template-columns:1fr}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .dash-hero{flex-direction:column;gap:16px;text-align:center}
+  .dash-meta{text-align:center}
+  .radar-wrap{flex-direction:column}
+}
+
+/* ─── Toast ─── */
+.toast{position:fixed;bottom:32px;right:32px;background:#1D2129;color:#fff;padding:12px 20px;border-radius:var(--radius);font-size:13px;opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none;z-index:9999}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* month self-test */
+.self-test-card{background:var(--pri-l);border:1px solid var(--pri-l2);border-radius:var(--radius-l);padding:20px;margin-top:16px}
+.self-test-card h3{color:var(--pri-d);font-size:14px;font-weight:700;margin-bottom:12px}
+.self-test-item{display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid rgba(22,119,255,.1)}
+.self-test-item:last-child{border-bottom:none}
+
+/* week note area */
+.week-note-area{margin-top:12px;padding:12px;background:var(--border2);border-radius:var(--radius);border:1px solid var(--border)}
+.week-note-toggle{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--pri);font-weight:500;cursor:pointer;padding:0;margin:0}
+.week-note-toggle:hover{color:var(--pri-d)}
+.week-note-area.closed .week-note-textarea{display:none}
+.week-note-area.closed .week-note-saved{display:none}
+.week-note-textarea{width:100%;min-height:80px;border:none;outline:none;background:transparent;font-family:inherit;font-size:13px;color:var(--t1);resize:vertical;padding:8px 0;margin-top:8px;border-bottom:1px solid var(--border);transition:.2s}
+.week-note-textarea:focus{border-bottom-color:var(--pri)}
+.week-note-textarea.saved{border-bottom-color:var(--suc)}
+.week-note-saved{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--suc);margin-top:8px;animation:fadeInOut 2s ease-in-out forwards;opacity:0}
+@keyframes fadeInOut{0%{opacity:0}20%{opacity:1}80%{opacity:1}100%{opacity:0}}
+</style>
+</head>
+<body>
+<div id="app">
+
+<div class="top-bar">
+  <div class="top-brand">🚀 AI客服PM成长系统</div>
+  <div class="top-nav" id="topNav">
+    <button class="top-nav-item active" onclick="nav('dash')">📊 总览</button>
+    <button class="top-nav-item" onclick="nav('weekly')">📋 周计划</button>
+    <button class="top-nav-item" onclick="nav('daily')">📅 今日任务</button>
+    <button class="top-nav-item" onclick="nav('res')">📚 学习资源</button>
+    <button class="top-nav-item" onclick="nav('radar')">🎯 能力雷达</button>
+    <button class="top-nav-item" onclick="nav('portfolio')">💼 作品集</button>
+    <button class="top-nav-item" onclick="nav('iq')">🎤 面试题库</button>
+  </div>
+</div>
+
+<!-- PAGE: DASHBOARD -->
+<div id="p-dash" class="page active">
+  <div class="dash-hero">
+    <div>
+      <h1>AI客服产品经理 · 6个月成长路径</h1>
+      <p>基于Boss直聘真实招聘数据 · 三轮专家对抗优化 · 2026版</p>
+    </div>
+    <div class="dash-meta">
+      <div class="big-num" id="daysLeft">—</div>
+      <small>距离目标还有 天</small>
+    </div>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:16px">
+    <div class="stat-card">
+      <div class="stat-num" id="totalDone">0</div>
+      <div class="stat-label">已完成任务</div>
+      <div class="progress-wrap" style="margin-top:8px">
+        <div class="progress-bar" id="totalBar" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="weekDone">0</div>
+      <div class="stat-label">本周完成任务</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="curWeek">—</div>
+      <div class="stat-label">当前学习周次</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="portDone">0</div>
+      <div class="stat-label">作品集已完成</div>
+    </div>
+  </div>
+
+  <div class="phase-overview">
+    <div class="phase-card p1">
+      <h3>阶段一：夯实基础</h3>
+      <p>W1-W8 · LLM底座 + Dify实操 + 客服架构</p>
+      <div style="font-size:12px;color:var(--t2)">核心产出：客服全景分析报告 + 3个Demo</div>
+      <div class="mini-progress"><div class="mini-bar" id="ph1bar" style="width:0%"></div></div>
+      <div style="font-size:11px;color:var(--t3);margin-top:6px" id="ph1pct">0%</div>
+    </div>
+    <div class="phase-card p2">
+      <h3>阶段二：核心技能</h3>
+      <p>W9-W16 · AI客服产品设计全链路</p>
+      <div style="font-size:12px;color:var(--t2)">核心产出：完整AI客服PRD + 交互原型</div>
+      <div class="mini-progress"><div class="mini-bar" id="ph2bar" style="width:0%"></div></div>
+      <div style="font-size:11px;color:var(--t3);margin-top:6px" id="ph2pct">0%</div>
+    </div>
+    <div class="phase-card p3">
+      <h3>阶段三：综合提升</h3>
+      <p>W17-W24 · 进阶架构 + 求职就绪</p>
+      <div style="font-size:12px;color:var(--t2)">核心产出：作品集 + 通过3+场面试</div>
+      <div class="mini-progress"><div class="mini-bar" id="ph3bar" style="width:0%"></div></div>
+      <div style="font-size:11px;color:var(--t3);margin-top:6px" id="ph3pct">0%</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⚡</span>两条并行主线（全程）</div>
+    <div class="grid-2">
+      <div style="padding:14px;background:var(--ph3-bg);border-radius:var(--radius);border:1px solid var(--ph3-bd)">
+        <div style="font-size:13px;font-weight:700;color:var(--ph3-t);margin-bottom:8px">🖊️ 个人品牌线（W1起）</div>
+        <div style="font-size:12px;color:var(--t2)">每周在即刻/知乎/公众号发1条AI产品相关思考（100字即可）。6个月积累24条，面试前已是行业可见的AI PM。</div>
+      </div>
+      <div style="padding:14px;background:var(--ph2-bg);border-radius:var(--radius);border:1px solid var(--ph2-bd)">
+        <div style="font-size:13px;font-weight:700;color:var(--ph2-t);margin-bottom:8px">🤝 人脉建设线（W8起）</div>
+        <div style="font-size:12px;color:var(--t2)">每两周在脉脉/LinkedIn联系1个AI客服相关行业人士。不要直接要内推，先建立真实连接，了解真实业务痛点。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title"><span class="icon">📌</span>每日最小行动原则</div>
+    <div style="font-size:13px;color:var(--t2);line-height:1.8">
+      <strong style="color:var(--pri)">每天只需完成1件事（30分钟）</strong>，这是"最低保障"。2小时是理想状态，但30分钟是不可突破的底线。<br>
+      能坚持30分钟/天 × 180天 = 90小时，远胜于"计划2小时但只坚持了3周"。
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: WEEKLY PLAN -->
+<div id="p-weekly" class="page">
+  <div class="week-filter">
+    <button class="filter-btn active" onclick="filterWeeks('all',this)">全部（24周）</button>
+    <button class="filter-btn" onclick="filterWeeks('1',this)">阶段一 W1-W8</button>
+    <button class="filter-btn" onclick="filterWeeks('2',this)">阶段二 W9-W16</button>
+    <button class="filter-btn" onclick="filterWeeks('3',this)">阶段三 W17-W24</button>
+    <button class="filter-btn" onclick="filterWeeks('undone',this)">未完成</button>
+  </div>
+  <div class="week-accordion" id="weekAccordion"></div>
+</div>
+
+<!-- PAGE: DAILY TRACKER -->
+<div id="p-daily" class="page">
+  <div class="daily-top">
+    <input type="date" class="daily-date-input" id="dailyDateInput">
+    <div class="daily-week-tag ph1-badge" id="dailyWeekTag">计算中...</div>
+  </div>
+  <div id="dailyContent"></div>
+</div>
+
+<!-- PAGE: RESOURCES -->
+<div id="p-res" class="page">
+  <div class="card">
+    <div class="card-title"><span class="icon">📚</span>学习资源总表</div>
+    <div style="overflow-x:auto">
+    <table class="res-table">
+      <thead><tr><th>分类</th><th>资源名称</th><th>内容简介</th><th>使用阶段</th><th>优先级</th></tr></thead>
+      <tbody id="resTableBody"></tbody>
+    </table>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title"><span class="icon">🛠</span>工具全景图</div>
+    <div class="grid-3" id="toolGrid"></div>
+  </div>
+</div>
+
+<!-- PAGE: RADAR -->
+<div id="p-radar" class="page">
+  <div class="card">
+    <div class="card-title"><span class="icon">🎯</span>5大能力自评雷达图</div>
+    <div class="radar-wrap">
+      <div class="radar-chart-box">
+        <canvas id="radarCanvas" width="380" height="380"></canvas>
+      </div>
+      <div class="radar-sliders">
+        <div id="sliderContainer"></div>
+        <button onclick="saveRadar()" style="background:var(--pri);color:#fff;padding:10px 24px;border-radius:var(--radius);font-size:14px;font-weight:600;margin-top:16px;transition:.2s;width:100%">保存本次评分</button>
+        <div class="radar-history" id="radarHistory"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title"><span class="icon">🗓</span>每月能力自测场景</div>
+    <div id="selfTestList"></div>
+  </div>
+</div>
+
+<!-- PAGE: PORTFOLIO -->
+<div id="p-portfolio" class="page">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <div style="font-size:13px;color:var(--t3)">点击卡片右上角更新状态 · 可填入作品链接</div>
+  </div>
+  <div class="portfolio-grid" id="portGrid"></div>
+</div>
+
+<!-- PAGE: INTERVIEW BANK -->
+<div id="p-iq" class="page">
+  <div class="iq-filter">
+    <button class="filter-btn active" onclick="filterIQ('all',this)">全部</button>
+    <button class="filter-btn" onclick="filterIQ('tech',this)">技术类</button>
+    <button class="filter-btn" onclick="filterIQ('prod',this)">产品设计类</button>
+    <button class="filter-btn" onclick="filterIQ('biz',this)">业务类</button>
+    <button class="filter-btn" onclick="filterIQ('new',this)">未准备</button>
+    <button class="filter-btn" onclick="filterIQ('ready',this)">已就绪</button>
+  </div>
+  <div id="iqList"></div>
+</div>
+
+</div><!-- /app -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+
+const START_DATE = localStorage.getItem('startDate') || (() => {
+  const d = new Date(); d.setHours(0,0,0,0);
+  const s = d.toISOString().split('T')[0];
+  localStorage.setItem('startDate', s);
+  return s;
+})();
+
+const WEEKS = [
+  // ─── PHASE 1 ───
+  {w:1,ph:1,title:'LLM产品能力地图 + Dify上手',tasks:[
+    {id:'w1_1',text:'画"LLM能做/不能做/会出错"各5条的产品能力边界地图',tag:'must'},
+    {id:'w1_2',text:'注册Dify（dify.ai），走完快速入门，创建第一个对话应用Demo',tag:'tool'},
+    {id:'w1_3',text:'注册阿里云智能客服或Zendesk，体验完整客服流程（发10条消息记录感受）',tag:'must'},
+    {id:'w1_4',text:'发第1条AI产品思考到即刻/知乎（100字，任何观察都行）',tag:'pub'},
+    {id:'w1_5',text:'在脉脉/LinkedIn搜索"客服产品经理"，发出3条联系请求，预约采访'},
+    {id:'w1_6',text:'整理一个"AI名词速查表"：LLM/Token/上下文窗口/Temperature/幻觉 各用自己话解释'},
+  ],deliver:'LLM能力地图 + Dify第一个Demo录屏'},
+
+  {w:2,ph:1,title:'Prompt Engineering（含安全边界设计）',tasks:[
+    {id:'w2_1',text:'学习Zero-shot/Few-shot/Chain-of-Thought/Role Prompting，每种写1个客服场景示例',tag:'must'},
+    {id:'w2_2',text:'重点练习：为客服机器人写System Prompt，包含品牌个性+合规边界+越狱防护三层'},
+    {id:'w2_3',text:'测试"越狱攻击"：用5种方式尝试让机器人说出不该说的内容，记录结果和防护方案'},
+    {id:'w2_4',text:'实操：多轮对话上下文压缩——当对话超过10轮后Prompt如何保留有效信息'},
+    {id:'w2_5',text:'发第2条内容（记录这周Prompt工程的1个有趣发现）',tag:'pub'},
+    {id:'w2_6',text:'在Dify里搭一个带System Prompt的客服机器人，测试30条消息'},
+  ],deliver:'5套客服场景Prompt（含安全边界设计）+ Dify Demo v2'},
+
+  {w:3,ph:1,title:'客服产品架构 + 真人采访',tasks:[
+    {id:'w3_1',text:'完成至少1次真人采访（客服产品经理/客服运营主管），记录5个文档里找不到的业务痛点',tag:'must'},
+    {id:'w3_2',text:'画出客服产品完整架构图：IM接入层→意图识别→知识库→工单→质检→数据分析层'},
+    {id:'w3_3',text:'理解并记录6大核心指标：CSAT/FCR/AHT/NPS/人工转接率/自助解决率，含行业基准值'},
+    {id:'w3_4',text:'在Zendesk/Udesk自己扮演客服+用户，走完1个完整投诉处理流程'},
+    {id:'w3_5',text:'发第3条内容（分享采访里最出乎意料的1个业务发现）',tag:'pub'},
+  ],deliver:'客服产品架构图 + 真人采访笔记（5个真实业务痛点）'},
+
+  {w:4,ph:1,title:'工单系统 + 知识库深度拆解',tasks:[
+    {id:'w4_1',text:'画工单全生命周期图：创建→分配→处理→转单→关闭→归档，每步标注AI可介入点'},
+    {id:'w4_2',text:'设计SLA规则：针对"电商退款投诉"场景设计3级优先级规则和超时自动升级逻辑'},
+    {id:'w4_3',text:'写"传统知识库 vs RAG知识库"对比分析（500字），重点写清楚产品侧的差异'},
+    {id:'w4_4',text:'调研1款知识库产品（Notion AI/飞书知识库/Confluence），记录其知识更新工作流'},
+    {id:'w4_5',text:'发第4条内容',tag:'pub'},
+    {id:'w4_6',text:'在Dify创建一个知识库，上传30条FAQ，测试召回效果'},
+  ],deliver:'工单系统功能清单（含AI增强标注）+ Dify RAG Demo'},
+
+  {w:5,ph:1,title:'SQL基础 + 数据分析能力入门',tasks:[
+    {id:'w5_1',text:'完成Mode SQL Tutorial前4节（mode.com/sql-tutorial，免费）掌握SELECT/WHERE/GROUP BY/JOIN',tag:'must'},
+    {id:'w5_2',text:'用SQL写出5个客服场景查询：①今日CSAT均值 ②各意图分类量 ③坏case集中时段 ④转人工率 ⑤FCR趋势'},
+    {id:'w5_3',text:'学Excel数据透视表（网上找1小时教程），用模拟数据跑一个客服效率分析'},
+    {id:'w5_4',text:'阅读1篇真实公司的AI客服数据分析案例（36kr/人人都是PM搜索）'},
+    {id:'w5_5',text:'发第5条内容（分享1个数据分析在客服产品中的应用场景）',tag:'pub'},
+  ],deliver:'5条客服场景SQL + 数据透视分析截图'},
+
+  {w:6,ph:1,title:'Dify Workflow + 多分支客服完整流程',tasks:[
+    {id:'w6_1',text:'Dify Workflow实战：搭出意图分类→分支处理（FAQ/投诉/退款）→输出结果的完整流程',tag:'tool'},
+    {id:'w6_2',text:'在流程里加入"情绪判断"节点：当用户情绪为愤怒时自动触发转人工逻辑'},
+    {id:'w6_3',text:'测试异常输入：用20种刁钻问法测试你的流程，记录失败点并修复'},
+    {id:'w6_4',text:'画出你搭建的Workflow架构图，用文字解释每个节点的逻辑'},
+    {id:'w6_5',text:'发第6条内容',tag:'pub'},
+    {id:'w6_6',text:'第一次15分钟模拟面试（自问自答录音）：你会怎么解释RAG给非技术的产品VP？'},
+  ],deliver:'多分支客服Workflow Demo（含情绪判断+转人工）+ 架构说明文档'},
+
+  {w:7,ph:1,title:'Agent核心概念 + 失败处理设计',tasks:[
+    {id:'w7_1',text:'深度理解ReAct框架：思考→行动→观察→再思考的循环，用"查订单+退款处理"写出完整的Agent推理链',tag:'must'},
+    {id:'w7_2',text:'学习Tool Use/Function Calling：设计一个客服Agent的工具集（查单/发短信/创建工单/退款接口）'},
+    {id:'w7_3',text:'重点设计：Agent失败处理方案——工具调用失败、置信度低、用户不配合时各如何处理'},
+    {id:'w7_4',text:'在Dify里搭一个带HTTP节点的Agent（模拟调用外部API查订单状态）',tag:'tool'},
+    {id:'w7_5',text:'发第7条内容（分享Agent最难搞定的1个产品设计问题）',tag:'pub'},
+  ],deliver:'客服Agent工具集设计文档 + Dify Agent Demo（含失败处理逻辑）'},
+
+  {w:8,ph:1,title:'Agent深化 + 全景分析报告发布',tasks:[
+    {id:'w8_1',text:'深化上周Agent：加入"用户信任建立"机制——让用户知道Agent在做什么，减少黑盒感'},
+    {id:'w8_2',text:'思考并文档化：哪些任务给Agent自主执行，哪些必须要人工确认？写出判断框架',tag:'must'},
+    {id:'w8_3',text:'完成《AI客服产品全景分析报告》（3000字+），发布到知乎/公众号（公开发布，不是存草稿）',tag:'pub'},
+    {id:'w8_4',text:'M1能力自测（30分钟）：拿一个陌生AI客服场景，在30分钟内画出架构图并指出3个核心产品问题'},
+    {id:'w8_5',text:'从W8起，每两周联系1个AI客服行业人士（今天发出第1条联系消息）'},
+    {id:'w8_6',text:'整理阶段一所有Demo和文档，建立作品集文件夹'},
+  ],deliver:'AI客服产品全景分析报告（已发布，有链接）+ 阶段一Demo合集'},
+
+  // ─── PHASE 2 ───
+  {w:9,ph:2,title:'意图识别系统产品设计',tasks:[
+    {id:'w9_1',text:'为"电商平台客服"设计完整意图分类体系：4大类×5个小意图=20个意图（至少），含置信度阈值',tag:'must'},
+    {id:'w9_2',text:'设计"置信度低"的处理方案：澄清问答话术模板 + 转人工触发条件（3层兜底）'},
+    {id:'w9_3',text:'设计"意图冲突"处理：用户一句话包含退款+换货两个意图时，系统如何决策？'},
+    {id:'w9_4',text:'用Dify验证意图识别：用100个测试问题跑你的意图分类体系，记录误识别case'},
+    {id:'w9_5',text:'发第9条内容',tag:'pub'},
+    {id:'w9_6',text:'15分钟模拟面试：如何设计意图体系冷启动策略（从0开始怎么覆盖80%场景）？'},
+  ],deliver:'电商客服意图分类体系文档 + 100条测试记录 + 置信度处理方案'},
+
+  {w:10,ph:2,title:'多轮对话管理 + 槽位填充设计',tasks:[
+    {id:'w10_1',text:'设计"退款申请"完整多轮对话流程：含槽位清单（需收集哪些信息）+每轮的话术模板',tag:'must'},
+    {id:'w10_2',text:'设计对话状态机：画出状态转移图，包含正常流程+5种异常分支（用户跑题/改变意图/沉默/重复等）'},
+    {id:'w10_3',text:'用Dify Workflow实现多轮对话流程，测试至少15种不同用户回答场景'},
+    {id:'w10_4',text:'研究会话超时+恢复机制：用户30分钟后继续对话，系统如何衔接上下文'},
+    {id:'w10_5',text:'发第10条内容',tag:'pub'},
+  ],deliver:'退款申请多轮对话流程图 + 状态机图 + Dify实现Demo'},
+
+  {w:11,ph:2,title:'RAG知识库全链路 + 运维工作流设计',tasks:[
+    {id:'w11_1',text:'深入理解RAG全链路：分块策略（Chunk Size选择逻辑）→Embedding→向量检索→Rerank→生成',tag:'must'},
+    {id:'w11_2',text:'设计知识库运维工作流：知识更新触发机制/冲突检测/版本管理/过期清退四个模块'},
+    {id:'w11_3',text:'设计知识权限管理：不同客服角色（一线/二线/主管）看到的知识库应该有什么区别'},
+    {id:'w11_4',text:'在Dify测试不同Chunk Size（200/500/1000 tokens）对召回率的影响，记录数据'},
+    {id:'w11_5',text:'发第11条内容（分享RAG在实际使用中最容易踩的坑）',tag:'pub'},
+    {id:'w11_6',text:'联系1位行业人士（本周执行双周人脉计划）'},
+  ],deliver:'RAG知识库产品设计方案（含运维工作流）+ 不同Chunk Size测试对比'},
+
+  {w:12,ph:2,title:'AI幻觉防控产品方案',tasks:[
+    {id:'w12_1',text:'整理AI幻觉在客服场景的危害分类：错误退款金额/虚假物流信息/错误政策解读/伪造联系方式',tag:'must'},
+    {id:'w12_2',text:'设计引用溯源机制：每个AI回答必须标注来源文档，产品层面如何实现？',tag:'must'},
+    {id:'w12_3',text:'设计高风险话题拦截清单（至少20个触发词）和对应的兜底话术'},
+    {id:'w12_4',text:'设计置信度兜底策略：低置信度答案→触发人工复核→还是直接转人工？决策树怎么设计'},
+    {id:'w12_5',text:'15分钟模拟面试：如何在PRD里描述幻觉防控方案（给研发看的技术规格怎么写）'},
+    {id:'w12_6',text:'发第12条内容',tag:'pub'},
+  ],deliver:'AI幻觉防控产品方案文档（含引用溯源+高风险拦截+兜底策略）'},
+
+  {w:13,ph:2,title:'智能质检产品设计',tasks:[
+    {id:'w13_1',text:'设计智能质检评分维度：语言规范/问题解决率/合规性/情绪管理/SLA遵守，每维度设计评分标准',tag:'must'},
+    {id:'w13_2',text:'设计AI评分 vs 人工复核的协作机制：什么情况下AI评分直接采纳，什么情况下触发人工复核'},
+    {id:'w13_3',text:'设计质检闭环：质检发现的问题如何自动反馈到知识库和Prompt优化（设计数据流）'},
+    {id:'w13_4',text:'研究1款真实质检产品（如晓多/云问/网易七鱼），写竞品分析'},
+    {id:'w13_5',text:'发第13条内容',tag:'pub'},
+    {id:'w13_6',text:'联系1位行业人士'},
+  ],deliver:'智能质检产品设计方案 + 1份竞品分析'},
+
+  {w:14,ph:2,title:'数据评估体系 + 实验设计方法',tasks:[
+    {id:'w14_1',text:'建立两层指标体系：①业务指标（CSAT/FCR/AHT）②AI效果指标（意图准确率/召回率/应答通过率）',tag:'must'},
+    {id:'w14_2',text:'学习A/B测试设计：实验组和对照组如何设置、流量如何分配、实验期多长、如何处理实验污染',tag:'must'},
+    {id:'w14_3',text:'设计1个完整的AI客服A/B测试方案（场景自选，包含假设/指标/样本量/时长/结论判断标准）'},
+    {id:'w14_4',text:'在墨刀/Figma画出AI客服效果评估看板（低保真，展示关键指标和图表类型）'},
+    {id:'w14_5',text:'15分钟模拟面试：如果CSAT突然下降了5%，你会怎么排查根因？'},
+    {id:'w14_6',text:'发第14条内容',tag:'pub'},
+  ],deliver:'两层指标体系文档 + A/B测试方案 + 效果评估看板原型'},
+
+  {w:15,ph:2,title:'Badcase分析方法论 + 标注工具实操',tasks:[
+    {id:'w15_1',text:'下载安装Label Studio（开源免费），上传30条Badcase文本，建立标注任务',tag:'tool'},
+    {id:'w15_2',text:'Badcase四步法实操：①收集→②按错误类型聚类（意图误识别/知识缺失/Prompt失效/幻觉/安全漏洞）→③归因→④改进方案'},
+    {id:'w15_3',text:'为每种错误类型写一份"根因分析+修复方案"，格式化成可复用模板',tag:'must'},
+    {id:'w15_4',text:'联系1位行业人士',tag:'pub'},
+    {id:'w15_5',text:'发第15条内容（分享Badcase分析里最有价值的1个发现）',tag:'pub'},
+  ],deliver:'Badcase分析报告模板 + 30个样本标注截图 + Label Studio实操记录'},
+
+  {w:16,ph:2,title:'完整AI客服PRD（含降级方案）',tasks:[
+    {id:'w16_1',text:'完成完整AI客服PRD：背景/目标/用户旅程/功能规格/AI能力说明/数据需求/上线计划/评估体系',tag:'must'},
+    {id:'w16_2',text:'PRD必须包含"AI降级方案"章节：API不稳定时的降级逻辑/意图识别失效时的规则引擎兜底/知识库空召回的处理'},
+    {id:'w16_3',text:'在墨刀/Figma完成交互原型（12-15个关键页面：意图识别/工单/知识库/质检/数据看板）'},
+    {id:'w16_4',text:'M2能力自测（30分钟）：拿一份陌生AI客服PRD，找出其中3个AI设计缺陷'},
+    {id:'w16_5',text:'发第16条内容',tag:'pub'},
+    {id:'w16_6',text:'15分钟模拟面试：向产品VP解释为什么AI效果比预期差30%且需要更多时间'},
+  ],deliver:'完整AI客服PRD（5000字+）+ 交互原型（12+页面）'},
+
+  // ─── PHASE 3 ───
+  {w:17,ph:3,title:'Multi-Agent架构设计',tasks:[
+    {id:'w17_1',text:'设计电商平台Multi-Agent客服架构：调度Agent+退款Agent+查单Agent+情感Agent+工具Agent，画出调用关系图',tag:'must'},
+    {id:'w17_2',text:'回答并文档化：什么情况下用Multi-Agent，什么时候单Agent就够？给出5个判断条件'},
+    {id:'w17_3',text:'设计跨Agent的状态共享方案：如何在多个Agent之间传递会话状态而不产生混乱'},
+    {id:'w17_4',text:'阅读LangChain Multi-Agent相关文档（重点看Concepts，跳过代码细节）'},
+    {id:'w17_5',text:'发第17条内容',tag:'pub'},
+    {id:'w17_6',text:'联系1位行业人士'},
+  ],deliver:'Multi-Agent客服架构设计文档 + 架构图 + 使用场景判断框架'},
+
+  {w:18,ph:3,title:'模型选型 + Fine-tuning产品判断',tasks:[
+    {id:'w18_1',text:'完成"Prompt优化 vs RAG vs Fine-tuning"选型判断框架，给出5条选型规则',tag:'must'},
+    {id:'w18_2',text:'对比3款主流客服场景大模型（通义千问/文心一言/Claude/GPT-4o），写选型报告'},
+    {id:'w18_3',text:'研究AI客服的合规场景：金融/医疗行业的AI客服有哪些法规限制，如何在产品设计中体现'},
+    {id:'w18_4',text:'15分钟模拟面试：一位工程师说"我们用Fine-tuning比Prompt工程效果好10%"，你怎么回应'},
+    {id:'w18_5',text:'发第18条内容（分享你的模型选型判断框架）',tag:'pub'},
+  ],deliver:'模型选型对比报告 + Fine-tuning判断框架 + 合规设计checklist'},
+
+  {w:19,ph:3,title:'用户信任建立 + AI产品ROI设计',tasks:[
+    {id:'w19_1',text:'设计"AI信任建立"产品机制：透明度设计（让用户知道在和AI说话）+渐进信任+失败后的恢复设计',tag:'must'},
+    {id:'w19_2',text:'设计AI客服ROI计算模型：人工成本节省/客满意度提升对复购的影响/质检效率提升，给出可量化公式'},
+    {id:'w19_3',text:'研究"AI原生产品设计原则"（搜索：AI-native product design），整理5条最重要的原则'},
+    {id:'w19_4',text:'联系1位行业人士',tag:'pub'},
+    {id:'w19_5',text:'发第19条内容',tag:'pub'},
+  ],deliver:'AI信任建立产品方案 + ROI计算模型'},
+
+  {w:20,ph:3,title:'综合项目（垂直场景）· 上半段',tasks:[
+    {id:'w20_1',text:'选择1个被大公司忽视的垂直场景（宠物医疗/跨境电商/政务热线/教育客服/保险理赔），输出场景选择理由',tag:'must'},
+    {id:'w20_2',text:'完成该场景的市场调研报告：行业规模/痛点/现有解决方案缺陷/AI切入机会'},
+    {id:'w20_3',text:'完成产品定位文档：目标用户画像（2个核心用户角色）+ 核心价值主张（1句话）'},
+    {id:'w20_4',text:'完成AI架构设计图（基于该垂直场景的完整技术架构）'},
+    {id:'w20_5',text:'发第20条内容（分享为什么选择这个垂直场景）',tag:'pub'},
+    {id:'w20_6',text:'15分钟模拟面试：如何向投资人介绍你的这个垂直场景AI客服产品机会'},
+  ],deliver:'垂直场景市场调研报告 + 产品定位文档 + AI架构图'},
+
+  {w:21,ph:3,title:'综合项目（垂直场景）· 下半段',tasks:[
+    {id:'w21_1',text:'完成该场景完整PRD（基于W16的框架，加入垂直场景特有内容）',tag:'must'},
+    {id:'w21_2',text:'完成交互原型（15+页面，使用Figma/墨刀，包含用户旅程全路径）'},
+    {id:'w21_3',text:'完成效果评估体系和GTM上线计划（含灰度策略+培训方案+回滚预案）'},
+    {id:'w21_4',text:'M3能力自测（30分钟）：拿一个多Agent失败的真实案例，在30分钟内提出改进方案'},
+    {id:'w21_5',text:'发第21条内容',tag:'pub'},
+    {id:'w21_6',text:'联系1位行业人士'},
+  ],deliver:'垂直场景完整PRD + 交互原型（15+页）+ GTM计划'},
+
+  {w:22,ph:3,title:'作品集整理 + 量化呈现',tasks:[
+    {id:'w22_1',text:'用Notion整理作品集：封面页（30秒能看完的个人定位）+ 5个项目卡片',tag:'must'},
+    {id:'w22_2',text:'每个项目必须有量化数据（即使是估算）：如"意图识别准确率从65%优化至89%"（可合理估算）'},
+    {id:'w22_3',text:'写3个"AI产品失败案例分析"——展示你敢于正视失败，分析比成功案例更有说服力'},
+    {id:'w22_4',text:'把所有公开发布的内容（知乎/即刻）链接整理到作品集，这是思考深度的证明'},
+    {id:'w22_5',text:'发第22条内容',tag:'pub'},
+    {id:'w22_6',text:'给3位朋友展示作品集，收集他们10秒内的第一印象反馈'},
+  ],deliver:'在线作品集（Notion链接）+ 量化数据覆盖每个项目'},
+
+  {w:23,ph:3,title:'简历打磨 + 结构化面试准备',tasks:[
+    {id:'w23_1',text:'改写简历：每条经历用"用AI解决了什么问题+量化改善了多少"格式重写',tag:'must'},
+    {id:'w23_2',text:'面试准备的核心练习：用结构化框架（MECE+从用户→业务→技术三层）拆解5个你从没见过的AI客服场景问题'},
+    {id:'w23_3',text:'准备"向上管理"答案：如何向产品VP解释AI效果不稳定、需要更多时间和数据积累'},
+    {id:'w23_4',text:'完整模拟面试1次（找真人对练，1小时），记录所有弱点'},
+    {id:'w23_5',text:'发第23条内容',tag:'pub'},
+    {id:'w23_6',text:'M4能力自测：拿一份真实的AI客服Job Description，评估自己的匹配度并制定补缺计划'},
+  ],deliver:'优化后简历 + 5个新场景结构化答案 + 完整模拟面试记录'},
+
+  {w:24,ph:3,title:'投递冲刺 + 全面复盘',tasks:[
+    {id:'w24_1',text:'投递15+个AI客服产品经理岗位（含大厂/独角兽/AI原生公司的组合）',tag:'must'},
+    {id:'w24_2',text:'确认Dify Demo可实时演示（账号可登录、流程顺畅、有演示稿）',tag:'must'},
+    {id:'w24_3',text:'确认PRD文档已保存PDF，作品集链接在手机和电脑都可以打开'},
+    {id:'w24_4',text:'完成6个月全程复盘：每个阶段的实际完成率/最大收获/下一步继续提升的方向'},
+    {id:'w24_5',text:'发第24条内容（6个月学习总结，这是你个人品牌最重要的一篇文章）',tag:'pub'},
+    {id:'w24_6',text:'更新能力雷达图，记录6个月成长轨迹'},
+  ],deliver:'15+岗位投递记录 + 6个月复盘文章（已发布）+ 最终能力雷达图'},
+];
+
+const RESOURCES = [
+  {cat:'AI原理',name:'吴恩达Prompt Engineering',desc:'ChatGPT Prompt Engineering for Developers（免费，约2小时）',phase:'W1-W2',pri:5,url:'https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/'},
+  {cat:'AI原理',name:'Anthropic官方Prompt指南',desc:'Claude Prompt工程完整指南，官方权威，覆盖安全边界设计',phase:'W2',pri:5,url:'https://docs.anthropic.com/zh-CN/docs/build-with-claude/prompt-engineering/overview'},
+  {cat:'工具实操',name:'Dify官方文档',desc:'中文文档，含Workflow/Agent/知识库完整教程',phase:'W1起',pri:5,url:'https://docs.dify.ai/zh-hans'},
+  {cat:'工具实操',name:'Coze（字节）',desc:'国内主流低代码Agent平台，有丰富插件生态',phase:'W5-W7',pri:4,url:'https://www.coze.cn/'},
+  {cat:'工具实操',name:'Label Studio',desc:'开源数据标注工具，Badcase分析必用',phase:'W15',pri:4,url:'https://labelstud.io/'},
+  {cat:'客服业务',name:'Zendesk免费试用',desc:'14天免费，体验完整客服工作台+工单+知识库',phase:'W1-W3',pri:5,url:'https://www.zendesk.com/'},
+  {cat:'客服业务',name:'阿里云智能客服',desc:'国内主流AI客服平台，体验意图识别+机器人实际效果',phase:'W3-W4',pri:5,url:'https://www.aliyun.com/product/ccc'},
+  {cat:'数据分析',name:'Mode SQL Tutorial',desc:'免费在线SQL教程，无需安装，有真实数据集练习',phase:'W5',pri:4,url:'https://mode.com/sql-tutorial/'},
+  {cat:'技术理解',name:'LangChain文档',desc:'Agent框架，重点看Concepts/Agent部分，了解工具调用原理',phase:'W7-W8',pri:4,url:'https://python.langchain.com/docs/concepts/'},
+  {cat:'产品设计',name:'墨刀',desc:'国内主流原型工具，有AI辅助功能，适合快速出图',phase:'W13起',pri:5,url:'https://modao.cc/'},
+  {cat:'产品设计',name:'Figma',desc:'国际主流设计工具，熟练使用是大厂标配要求',phase:'W13起',pri:4,url:'https://www.figma.com/'},
+  {cat:'行业动态',name:'36氪/人人都是PM',desc:'搜索"AI客服"，阅读最新行业分析，每周1-2篇',phase:'全程',pri:4,url:'https://36kr.com/'},
+  {cat:'AI原理',name:'即刻/知乎AI圈子',desc:'关注AI产品经理相关话题，保持行业信息输入',phase:'全程',pri:3,url:'https://web.okjike.com/'},
+  // ── 实战向资源（非官方）──
+  {cat:'实战教程',name:'Dify实战B站教程',desc:'B站搜索"Dify实战"，有完整的Workflow/Agent/RAG搭建视频，中文讲解，比官方文档更易上手',phase:'W1-W7',pri:5,url:'https://search.bilibili.com/all?keyword=dify%E5%AE%9E%E6%88%98'},
+  {cat:'实战教程',name:'吴恩达AI短课合集',desc:'DeepLearning.AI系列免费短课：LangChain/RAG/Agents/Prompt，每门2-3小时，英文但配字幕',phase:'W1-W8',pri:5,url:'https://www.deeplearning.ai/short-courses/'},
+  {cat:'实战教程',name:'Prompt工程中文手册',desc:'GitHub最火中文Prompt工程指南，含CoT/RAG/Agent全面示例，可配合Dify直接上手',phase:'W2-W3',pri:5,url:'https://github.com/dair-ai/Prompt-Engineering-Guide/blob/main/pages/docs/zh/introduction.zh.mdx'},
+  {cat:'实战教程',name:'awesome-chatgpt-prompts',desc:'GitHub 10万+Star，大量真实可用Prompt示例，适合快速理解Prompt设计模式',phase:'W2',pri:4,url:'https://github.com/f/awesome-chatgpt-prompts'},
+  {cat:'实战教程',name:'LangChain速成（B站）',desc:'B站"LangChain入门"系列，RAG/Memory/Agent实现代码，帮助理解Agent背后的技术细节',phase:'W7-W8',pri:4,url:'https://search.bilibili.com/all?keyword=langchain%E5%85%A5%E9%97%A8'},
+  {cat:'实战教程',name:'Hugging Face免费课程',desc:'NLP课程（中文翻译版），理解Embedding/Tokenization等底层原理，配有在线运行环境',phase:'W1-W4',pri:4,url:'https://huggingface.co/learn/nlp-course/zh-CN/chapter1/1'},
+  {cat:'实战教程',name:'智谱AI开放平台文档',desc:'国内主流LLM API，实际接入成本低，适合做Dify以外的接口联调练习',phase:'W5-W6',pri:3,url:'https://open.bigmodel.cn/dev/howuse/introduction'},
+  {cat:'社区资讯',name:'AI产品经理星球',desc:'知识星球搜索"AI产品经理"，有实际工作案例分享和JD分析，比公众号更有干货',phase:'全程',pri:4,url:'https://wx.zsxq.com/'},
+  {cat:'社区资讯',name:'GitHub Dify社区Issues',desc:'Dify GitHub Issues区，看真实用户踩的坑，最快了解产品边界和常见问题解决方案',phase:'W1起',pri:4,url:'https://github.com/langgenius/dify/issues'},
+  {cat:'社区资讯',name:'AI产品经理公众号精选',desc:'推荐：产品经理AI学堂、AI产品笔记、新硅公路，搜索"AI客服"阅读实际落地案例',phase:'全程',pri:3,url:'https://mp.weixin.qq.com/'},
+  {cat:'客服业务',name:'Udesk智能客服',desc:'国内主流AI客服SaaS，有免费试用，可对比Zendesk体验国内外产品差异',phase:'W3-W4',pri:4,url:'https://www.udesk.cn/'},
+  {cat:'客服业务',name:'网易七鱼/腾讯企点',desc:'国内大厂AI客服产品，重点了解知识库管理/质检功能的产品设计逻辑',phase:'W9-W12',pri:4,url:'https://qiyukf.com/'},
+];
+
+const TOOLS = [
+  {name:'Dify',tag:'AI应用搭建',desc:'低代码AI工作流和Agent平台，贯穿全程最核心工具'},
+  {name:'Coze',tag:'AI应用搭建',desc:'字节旗下，Bot+Workflow+Plugin生态'},
+  {name:'Label Studio',tag:'数据标注',desc:'Badcase收集和标注，开源免费'},
+  {name:'墨刀/Figma',tag:'原型设计',desc:'原型和交互设计，面试展示必备'},
+  {name:'Mode/Tableau',tag:'数据分析',desc:'SQL和数据可视化，掌握基础'},
+  {name:'Notion',tag:'作品集',desc:'整理和展示作品集，可在线分享'},
+  {name:'Zendesk/Udesk',tag:'竞品体验',desc:'体验真实客服产品，建立产品感'},
+  {name:'Postman',tag:'API测试',desc:'测试AI接口，理解技术实现'},
+  {name:'即刻/知乎',tag:'个人品牌',desc:'发布内容，建立行业可见度'},
+];
+
+const RADAR_DIMS = [
+  {key:'ai',label:'AI技术理解',desc:'LLM/RAG/Agent原理，模型选型判断'},
+  {key:'tool',label:'工具动手能力',desc:'Dify搭建，Prompt工程，原型设计'},
+  {key:'biz',label:'客服业务深度',desc:'工单/知识库/质检/SLA，业务全流程'},
+  {key:'data',label:'数据分析',desc:'SQL，指标体系，A/B测试，Badcase分析'},
+  {key:'prod',label:'产品文档',desc:'PRD质量，用户旅程，竞品分析'},
+];
+
+const SELF_TESTS = [
+  {month:'M1末',test:'拿一个陌生AI客服场景，在30分钟内画出完整架构图并指出3个核心产品问题'},
+  {month:'M2末',test:'拿一份陌生AI客服PRD，找出其中3个AI设计缺陷（幻觉/降级/评估方面）'},
+  {month:'M3末',test:'拿一个Multi-Agent失败的真实案例，在30分钟内提出改进方案'},
+  {month:'M4末',test:'拿一份真实的AI客服JD，评估自己的匹配度，制定具体补缺计划'},
+  {month:'M5末',test:'完整模拟面试1小时，涵盖技术/产品/业务三类问题，找真人对练'},
+  {month:'M6末',test:'给作品集里最核心的项目，写一份3分钟pitch（如何向面试官介绍）'},
+];
+
+const PORTFOLIO_ITEMS = [
+  {phase:1,week:'W1',title:'Dify第一个客服Demo',desc:'基础对话应用，包含System Prompt安全边界设计'},
+  {phase:1,week:'W2',title:'5套客服场景Prompt集',desc:'含Zero-shot/CoT/安全边界，有badcase分析'},
+  {phase:1,week:'W3',title:'真人采访笔记',desc:'1+位客服PM深度访谈，5个真实业务痛点'},
+  {phase:1,week:'W4',title:'Dify RAG知识库Demo',desc:'含30条FAQ，测试召回效果对比'},
+  {phase:1,week:'W6',title:'多分支Workflow Demo',desc:'含意图识别+情绪判断+转人工逻辑'},
+  {phase:1,week:'W7-8',title:'Agent Demo + 全景分析报告',desc:'带工具调用的Agent + 已发布的3000字+分析报告'},
+  {phase:2,week:'W9',title:'电商客服意图体系',desc:'4大类20个意图，含置信度处理方案'},
+  {phase:2,week:'W11',title:'RAG知识库产品方案',desc:'含运维工作流、权限管理、评估指标'},
+  {phase:2,week:'W12',title:'AI幻觉防控方案',desc:'引用溯源+高风险拦截+兜底策略完整文档'},
+  {phase:2,week:'W14',title:'A/B测试方案',desc:'完整实验设计，含样本量计算和污染处理'},
+  {phase:2,week:'W15',title:'Badcase分析报告',desc:'30个样本，Label Studio标注，4类错误归因'},
+  {phase:2,week:'W16',title:'完整AI客服PRD',desc:'5000字+，含降级方案，配套12+页交互原型'},
+  {phase:3,week:'W17',title:'Multi-Agent架构设计',desc:'5个Agent协作架构图，含使用场景判断框架'},
+  {phase:3,week:'W20-21',title:'垂直场景综合项目',desc:'选定垂直行业的完整PRD+原型+GTM计划'},
+  {phase:3,week:'W22',title:'在线作品集',desc:'Notion整理，每个项目有量化数据'},
+];
+
+const IQ = [
+  {id:'iq1',cat:'tech',q:'请解释RAG的工作原理，以及在客服场景中如何选择分块策略？',
+   a:'RAG（检索增强生成）分三步：①用户问题经Embedding向量化→②在向量数据库中检索相似文档→③将检索结果拼入Prompt让LLM生成回答。分块策略：客服FAQ一问一答结构清晰，用500 tokens左右的固定分块；政策文档有章节结构，用语义分块（段落或章节）；实时更新文档需要精细分块（200 tokens）提高更新粒度。判断标准：召回率不足→减小Chunk Size；噪声太多→增大Chunk Size；精度优先→加Rerank重排序。'},
+  {id:'iq2',cat:'tech',q:'LLM幻觉在客服场景有什么危害？你会怎么减轻？',
+   a:'危害：告知用户错误的退款金额、虚假的物流状态、错误的政策解读、编造的联系方式，轻则客诉，重则法律纠纷。减轻方案（产品层面）：①引用溯源——每个回答必须标注来源文档，无法溯源则拒绝回答；②置信度阈值——低置信度自动转人工而非瞎答；③高风险话题拦截清单——金额/日期/联系方式等字段，AI必须从结构化数据库取，不从LLM生成；④事实核验链路——AI先答，系统后验证关键数字是否与数据库一致；⑤降级策略——当幻觉风险高时主动说"我不确定，帮您转接人工"。'},
+  {id:'iq3',cat:'tech',q:'什么情况下选Fine-tuning，什么情况下Prompt优化就够？',
+   a:'Prompt优化首选：格式/风格调整、通用能力提升、小时级迭代场景。RAG优先：知识密集型、知识需实时更新、领域专业问答。Fine-tuning谨慎使用场景：①高频固定任务（日处理量百万级以上）②特定输出格式（如JSON Schema强制要求）③对话风格高度定制（品牌专属语气）④Prompt工程已穷举但效果还差10%以上。实际判断：先用RAG+Prompt优化，测试3个迭代周期后还不达标，再考虑Fine-tuning。Fine-tuning的隐性成本：数据标注费用、模型维护、更新滞后性，比大多数人预期的要高。'},
+  {id:'iq4',cat:'tech',q:'你设计过的意图识别系统，如何处理低置信度情况？',
+   a:'三层兜底策略：①澄清问答（置信度60-80%）——"您是想问退款还是换货？"引导用户明确意图，最多问2轮；②宽泛回答（40-60%）——匹配到大类意图，给一个通用引导；③直接转人工（<40%）——不浪费用户时间，转人工并告知原因。同时要处理意图冲突（一句话多个意图）：优先处理高优先级意图（退款>查询）并在对话末尾主动询问另一个意图。冷启动策略：先覆盖Top 20意图（通常覆盖80%+的咨询量），再逐步扩展长尾意图。'},
+  {id:'iq5',cat:'tech',q:'什么是Agent的ReAct框架？如何在客服场景中应用？',
+   a:'ReAct = Reasoning + Acting。Agent的工作循环：思考（我需要做什么）→行动（调用工具）→观察（工具返回了什么）→再思考→再行动...直到完成任务。客服场景示例：用户说"我要退款"→思考：需要查订单 → 行动：调用查单API → 观察：订单状态是"已签收" → 思考：符合退款条件，需要核实用户信息 → 行动：询问用户确认收货日期 → 观察：用户确认7天内 → 思考：可以发起退款 → 行动：调用退款API → 成功。关键产品设计：①给每个行动设置超时和失败处理；②关键操作（真实退款）必须人工确认；③让用户看到Agent的进展状态，减少"黑盒"焦虑。'},
+  {id:'iq6',cat:'prod',q:'如何从0搭建一个AI客服知识库？遇到知识冲突怎么处理？',
+   a:'冷启动四步：①采集Top 20高频问题（覆盖80%咨询量），来源：人工客服记录/搜索词分析/用户投诉；②整理成标准Q&A格式（一问一答，不超过200字/条）；③上传Dify/知识库平台，测试召回准确率（目标Recall@5 > 90%）；④持续迭代：每周分析未命中的问题，补充进知识库。知识冲突处理：①建立"知识版本管理"——每条知识记录更新时间和来源；②设置"冲突检测"规则——同一话题的新旧内容在系统里标记对比；③明确"权威来源"优先级——官方政策 > 运营规则 > 历史案例；④设置"过期清退"机制——超过X天未更新的内容自动进入待审核队列。'},
+  {id:'iq7',cat:'prod',q:'智能质检和传统抽检的区别？你会如何设计质检评分模型？',
+   a:'传统抽检：随机抽取5-10%会话人工评分，覆盖率低、滞后性强、主观性强、结果不可量化。智能质检：全量覆盖、实时评分、标准统一、可追溯。评分模型设计：5个维度——①语言规范（是否礼貌用语，有无禁用语，10分）②问题解决率（用户问题是否实质解决，40分）③合规性（是否有违规承诺、未授权操作，20分）④情绪管理（用户情绪升级时是否有效安抚，20分）⑤SLA遵守（响应时长、解决时限，10分）。AI评分+人工复核协作：总分90分以上直接采纳，60-90分触发抽样人工复核，60分以下全量人工复核。闭环：质检发现的高频错误自动归类→推送到知识库待更新队列→优化Prompt→验证效果提升。'},
+  {id:'iq8',cat:'prod',q:'用户反馈"AI客服太笨了"，你怎么分析根因并制定改进方案？',
+   a:'第一步，定义"笨"的具体表现（不要被用户语言迷惑）：①答非所问（意图识别问题）②答案过时或错误（知识库问题）③重复追问已回答的内容（上下文管理问题）④话术生硬（Prompt问题）⑤无法处理复杂/多步骤问题（Agent能力问题）。第二步，数据验证：拉取最近1000条"差评"会话，用Badcase四分法聚类，确认主要错误类型分布。第三步，优先级判断：按"出现频次×影响严重度"排序，先攻前两名。第四步，针对性改进：意图识别问题→扩充意图样本+调低置信度阈值；知识库问题→更新过期知识+加入来源引用；Prompt问题→重写System Prompt+加入few-shot示例。第五步，A/B测试验证：改进后与原版本对照，指标改善>5%才全量发布。'},
+  {id:'iq9',cat:'prod',q:'你会用哪些指标评估AI客服产品上线是否成功？',
+   a:'分两层：业务指标（对老板）和AI效果指标（对自己）。业务指标：①自助解决率（目标>60%）②CSAT客满意度（与人工对比，差距<5%）③人工转接率（目标<30%）④AHT（AI处理比人工快多少）⑤整体客服成本变化。AI效果指标：①意图识别准确率（目标>90%）②知识召回率Recall@5（目标>90%）③应答通过率（质检达标率）④Badcase率（目标<5%）⑤对话完成率（用户问题在一次对话内解决）。判断上线成功的最低标准：自助解决率>50% + CSAT不低于人工的90% + Badcase率<10%。三项都达标才算上线成功，否则快速迭代。'},
+  {id:'iq10',cat:'biz',q:'客服AI化后，人工客服职责会发生什么变化？产品如何支持？',
+   a:'变化路径：AI处理80%+的简单重复问题→人工聚焦20%的复杂/高价值/情感问题→人工角色从"答题机器"升级为"问题决策者"和"AI训练者"。具体职责变化：①原来：接单→查询→回复；变化后：处理AI无法判断的复杂纠纷、安抚极度不满的用户、审核AI的高风险操作。②新增职责：Badcase标注（帮助AI学习）、知识库维护（更新政策变化）、AI边界识别（发现AI新的失败模式上报）。产品如何支持：①设计"AI辅助工作台"——人工处理时，AI实时提供相关知识、历史案例、推荐话术，人工做决策；②设计"高效转接"——AI转人工时，完整传递会话上下文，人工无需重复了解；③设计"Badcase标注入口"——人工处理结束后一键标注AI的错误，降低标注成本。'},
+  {id:'iq11',cat:'biz',q:'如果AI自助解决率已经很高（70%），还有哪些产品优化空间？',
+   a:'解决率70%是好成绩，但还有四个方向：①质量升级：解决率高≠满意度高，聚焦CSAT提升，检查那30%转人工里有多少是AI"敷衍了事"而非真的无法处理；②主动服务：从"被动问答"升级到"主动触达"——用户下单后主动推送可能遇到的问题，物流延迟前主动通知；③个性化：高价值用户（VIP/大客户）应该有专属的AI体验——更快响应、更主动服务、更少等待；④数据资产：AI客服积累的用户问题数据是产品改进金矿，建立"问题→洞察→产品改进"的反馈机制；⑤跨渠道一致性：确保微信/APP/电话/网页的AI体验一致，避免用户在不同渠道得到矛盾答案。'},
+  {id:'iq12',cat:'biz',q:'向上管理：如何向产品VP解释AI效果比预期差30%但需要更多时间？',
+   a:'不要说"AI还在学习"这种虚的话，VP听不懂也不关心。说清楚三件事：①当前差距的根因（具体）："当前Badcase率12%，主要集中在退款政策类问题（占60%），根因是知识库中有23条过期的退款规则，这是可以修复的工程问题，不是模型能力上限"；②修复路径和时间（具体）："接下来3周，先修复知识库→验证质检指标→再进行A/B测试"；③降低风险的措施："在这个阶段，AI继续服务简单查询类（当前效果好），退款处理类优先转人工，避免用户投诉"。关键：不要等VP来问，主动在周会上提出，附上数据图表，展示你在掌控局面而不是被问题追着跑。'},
+  {id:'iq13',cat:'tech',q:'Multi-Agent什么时候比单Agent更合适？给出判断条件。',
+   a:'Multi-Agent适合的5个判断条件：①任务需要并行处理（同时查询库存和物流，单Agent串行太慢）；②不同任务需要不同专业知识（退款处理需要了解财务规则，情感安抚需要不同的语气策略）；③某个子任务失败不影响整体（查单失败，情感安抚Agent仍可继续工作）；④需要相互检验（一个Agent生成回答，另一个Agent验证合规性）；⑤任务量大，需要横向扩展。单Agent就够的情况：线性步骤任务、对话轮数少、任务类型单一、响应速度优先（Multi-Agent增加延迟）。实际建议：先用单Agent快速验证，复杂度超过5步骤或需要并行时再升级为Multi-Agent。'},
+  {id:'iq14',cat:'prod',q:'设计AI客服的用户信任建立机制，如何减少用户的"AI抗拒感"？',
+   a:'三阶段信任建立：①透明化（让用户知道在和AI说话）——不伪装人工，明确标注"AI助手"，解释AI能做什么和不能做什么，设置"随时可以转人工"的显眼入口；②渐进信任——新用户第一次交互后主动询问满意度；AI处理低风险问题时顺带展示能力；成功解决问题后展示"类似问题已帮助了X万用户"；③失败后的恢复设计——AI搞错了，立刻承认并转人工，不辩解；人工接手后说"我已了解您之前和AI的全部沟通"；错误解决后追踪结果，用行动弥补信任损失。关键产品细节：AI打字速度不能太快（像机器），也不能太慢（令人不安）；回答开头不要"您好！我是AI助手XXX很高兴为您服务..."这种官方模板，用自然语言。'},
+  {id:'iq15',cat:'biz',q:'如何计算AI客服项目的ROI，向决策层证明值得投资？',
+   a:'ROI = (收益 - 成本) / 成本。收益计算：①人工成本节省：（原人均日处理量 × 人工客服数量 × 日薪）- （AI后需要的人工数 × 日薪）；②质量提升带来的间接收益：CSAT提升1分→复购率提升X%→对应收入增加；③质检效率提升：质检人力减少量 × 人力成本。成本计算：①AI平台费用（API调用费+平台订阅）；②数据准备和标注成本；③开发和集成成本；④持续运维成本。给决策层的表达方式：不要说"ROI 250%"——太抽象。换成"预计6个月后，人工客服从50人可以缩减到35人，按月均薪8000元计算，每月节省人力成本12万，AI系统月运营成本3万，月净节省9万，6个月回本"。具体的人和钱，比百分比数字有说服力10倍。'},
+];
+
+const IQ_FOLLOWUPS = {
+  'iq1': [
+    {q:'RAG召回质量不高时如何诊断？有哪些可量化的诊断步骤？',
+     a:'诊断四步走：①先看Recall@5——随机抽50条真实用户问题，手工确认正确答案文档是否在前5个召回结果里，低于85%就需要优化；②检查Embedding模型——用bge-m3或text-embedding-3-large替代默认模型，中文召回质量通常提升10-15%；③分析"未命中"案例——把Recall@5里漏掉的问题分类：a.分块过大（答案被切断）b.语义距离过远（用户说"不让退"，文档写"不符合退款条件"）c.关键词稀疏（专有名词、SKU编号）；④对症优化：语义距离问题→加Rerank重排序；关键词稀疏→引入BM25混合检索；分块过大→缩小Chunk Size到300-400 tokens重索引。'},
+    {q:'用户问题需要综合多个文档块的信息才能回答，RAG如何处理？',
+     a:'两种策略：①多跳检索（Multi-hop RAG）——先检索到第一个相关文档，提取中间答案，再用中间答案作为新查询二次检索，最终综合所有片段；②Map-Reduce模式——并行检索多个相关文档块，分别让LLM提取关键信息，最后做聚合总结。实际客服落地建议：多跳检索适合"有因果关系"的问题（比如先查退款政策、再查用户订单状态），但会增加延迟；Map-Reduce适合需要汇总多条FAQ的情况。产品层面要设计兜底：若检索到的多个文档块内容有冲突，应触发"信息可能有误，请联系人工确认"，不要让LLM自行"发挥"。'},
+    {q:'HyDE（假设文档嵌入）解决什么问题？什么时候值得引入？',
+     a:'HyDE（Hypothetical Document Embedding）的思路：先让LLM根据用户问题生成一个"假设的理想答案"，再用这个假设答案去做向量检索（而不是直接用原始问题）。解决的核心问题：用户问题往往很短且口语化（"退款多久到账？"），而文档里写的是标准书面语（"退款处理时间为3-7个工作日"），两者的向量空间距离较远。引入HyDE的时机：召回率已经优化到85%左右但还差最后几个百分点；用户问题普遍较短/口语化；当前Embedding模型对问句和答句的表示差异较大。代价：每次检索多消耗一次LLM调用（增加延迟和成本约20-30%），中小并发场景值得尝试，超高并发场景需要权衡。'},
+  ],
+  'iq2': [
+    {q:'除了引用溯源，如何从Prompt设计层面降低幻觉？有哪些可操作的写法？',
+     a:'五个可落地的Prompt反幻觉技巧：①约束输出范围——"只能基于以下文档回答，如果文档中没有相关信息，请回复：我没有找到相关信息，建议联系人工客服"；②拒绝未知——"对于你不确定的信息，用'我无法确认'而非猜测"；③数字/日期字段特殊处理——"涉及金额、日期、地址等具体数值，必须引用原文，不得改写或推断"；④Chain-of-Thought验证——让模型先推理"这个问题的答案在文档第X部分有/没有记录"，再生成回答；⑤Few-shot反例训练——在System Prompt中提供3-5个"这样回答是错误的"示例，帮助模型理解幻觉边界。最关键：以上技巧组合使用，单独使用一条效果有限。'},
+    {q:'如何建立一套可落地的幻觉监控系统？有哪些可量化的指标？',
+     a:'幻觉监控体系的三个层次：①事前检测（生成时）——用规则检测输出中的关键字段（金额、日期、联系方式、SKU编号）是否能在知识库原文中找到对应字符串，找不到就标记为"待人工复核"；②事中监控（实时）——跟踪"低置信度响应率"（触发转人工的比例），异常上升说明知识库覆盖率下降；③事后分析（离线）——每日抽样用户差评会话，人工标注幻觉类型：a.知识幻觉（答案错误）b.格式幻觉（答案对但格式不符）c.过度推断（超出文档范围）。可量化指标：幻觉率（人工抽样标注中幻觉条数/总样本）目标<5%；关键字段匹配率（可自动化计算）目标>95%；低置信度转人工率目标5-15%（过低说明置信度阈值设太宽，过高说明知识库覆盖不足）。'},
+    {q:'AI引用的文档来源是正确的，但用户仍然投诉答案有误，这是什么问题？怎么处理？',
+     a:'这是"知识库内容本身过期或不准确"的问题，不是RAG技术问题，而是知识库治理问题。典型场景：退款政策上月已更新，但知识库里存的还是旧版本；AI引用的是旧文档，引用来源"正确"，但信息已失效。根本解决方案是建立"知识库生命周期管理"：①来源绑定——每条知识条目绑定原始文档的版本号和更新时间；②变更触发更新——政策文档、产品规则、价格表等"高时效性文档"发生变更时，自动触发知识库更新任务推送给运营人员；③过期预警——超过30天未更新的政策类内容标记为"待确认"，AI回答时降低置信度；④短期应急——发现投诉后24小时内在知识库中加入"最新更新：[具体内容]"的覆盖性条目，让新内容召回权重高于旧内容。'},
+  ],
+  'iq3': [
+    {q:'你说"先用RAG+Prompt优化，3个迭代周期后还不达标再Fine-tuning"——3个迭代周期具体是指什么流程？',
+     a:'每个迭代周期的标准流程（约1-2周）：①收集Badcase——从用户差评/低置信度触发记录中抽取100-200条失败样本；②聚类分析——按错误类型分组：意图理解错误/知识召回失败/格式问题/风格问题；③针对性优化——知识召回类→更新知识库/调整分块；意图问题→调整Prompt/加few-shot；风格问题→改System Prompt语气；④效果验证——用同一批Badcase测试，计算"问题解决率"提升多少；⑤全量A/B测试——优化版本上5%流量对照。3个迭代周期的判断标准：如果每轮迭代边际收益<2%（即优化越来越困难），且当前效果还与目标差距>10%，这时才考虑Fine-tuning。'},
+    {q:'Fine-tuning真正的隐性成本有哪些？产品层面如何评估是否划算？',
+     a:'真正的隐性成本（很多人低估）：①数据成本——Fine-tuning需要高质量标注数据，1000条精标样本约需3-5人周（标注+QA），远比看起来贵；②更新滞后——模型Fine-tuning一次需要1-4周，而业务规则可能每周变化，Fine-tuning后的模型会快速"过时"；③维护成本——需要持续监控模型退化（Catastrophic Forgetting），定期重新训练；④迁移成本——换底座模型（比如从GPT-3.5到GPT-4）时，Fine-tuning数据可能需要重做；⑤对比基准的模糊——很难准确量化"Fine-tuning带来了多少提升 vs 进一步优化RAG和Prompt能带来多少"。产品经理的评估框架：如果任务足够标准化（输出格式固定）+ 调用量足够大（每天百万次+）+ 数据积累充足（万条以上）+ 更新频率低（月级别），Fine-tuning才真正划算。'},
+    {q:'对于AI客服产品经理，不做Fine-tuning能不能应对99%的业务需求？',
+     a:'大多数情况下，答案是可以。现实情况：国内头部AI客服产品（如智齿、Udesk、网易七鱼）大量使用RAG+Prompt工程，Fine-tuning并非标配，因为客服知识更新频率高、Fine-tuning维护成本难以承受。真正靠RAG+Prompt优化可以解决的问题：意图识别（Prompt分类）、知识问答（RAG）、对话风格（System Prompt）、安全边界（Prompt规则）、多轮对话记忆（Context Management）。需要Fine-tuning的极少数场景：①高度专业领域（医疗、法律）需要专业知识注入；②特定输出格式的强制要求（比如JSON Schema精确控制）；③品牌语气极度定制化（比如模仿特定角色的语气）。结论：作为产品经理，你需要知道Fine-tuning是什么、什么时候需要，但执行是工程师的工作。更重要的是把RAG和Prompt工程做好。'},
+  ],
+  'iq4': [
+    {q:'意图识别的"置信度"在技术上是如何计算的？产品经理需要理解到什么程度？',
+     a:'技术上：置信度通常是分类模型的Softmax输出概率，或LLM对不同意图分类的生成概率。产品经理需要理解的层次：①置信度是一个0-1的分数，越高说明模型越确定；②同一个阈值在不同意图类别上效果不同（比如"退款"意图误判代价高，应该设更高的阈值触发人工）；③置信度可以通过增加训练样本来提升，但长尾意图（出现频率很低）的置信度天然偏低。实际工作中更需要关注的问题：①各意图阈值的分类设置（不同意图设不同阈值而非统一阈值）；②"意图漂移"——用户表达方式随时间变化，导致原本准确的意图识别准确率下降，需要定期重新审视阈值；③新意图冷启动——新业务上线时，意图样本从零开始，初期置信度必然偏低，需要提前设计"低置信度"期的人工兜底方案。'},
+    {q:'如果用户在一句话里表达了两个甚至三个意图，产品应该怎么设计处理逻辑？',
+     a:'多意图处理的三种策略：①串行处理（优先级排序）——预设意图优先级（紧急>权益类>信息查询），一次只处理最高优先级意图，处理完后主动询问"您刚才还提到XXX，我来帮您处理"；②并行分拆——将复合问题拆分成多个子任务，同时启动处理，最后合并回答（适合信息查询类，不适合操作类）；③全部澄清——当意图超过2个且相互冲突时，先问"请问您最希望先处理哪个问题？"避免错误操作。产品设计原则：操作类意图（退款/换货/投诉）绝对不能并行处理（防止重复操作），必须串行并每步确认；信息查询类意图可以并行。UI设计：当多意图触发时，给用户展示一个清单"我识别到了以下几个问题：1...2...3...，请问您要先处理哪个？"而非AI自行决定顺序。'},
+    {q:'随着用户基数增大，意图体系应该如何演进？有什么扩展策略？',
+     a:'意图体系演进的三个阶段：①冷启动期（0-1）——先用规则+关键词做意图识别，覆盖Top 20意图（通常80%+咨询量），不追求完美，快速上线验证；②成长期（1-N）——每两周做一次"意图审计"：分析无法匹配到任何意图的问题（intent=None），从中挖掘新意图；当某个新意图累积到50+样本，就可以加入体系；③成熟期——意图体系超过100个意图时，需要分层管理：一级意图（退款/查询/投诉/建议）→二级意图（快递退款/商品退款/服务退款）→三级意图（仅在需要精细化操作时）。扩展原则：每新增一个意图，必须同时定义置信度阈值、处理流程、兜底策略，否则"意图垃圾场"会越来越难维护。指标：意图覆盖率（可匹配意图的问题数/总问题数）目标>90%，低于这个值说明意图体系需要扩充。'},
+  ],
+  'iq5': [
+    {q:'ReAct框架中，如果某个"行动"（工具调用）失败了，Agent应该如何处理？产品层面怎么设计？',
+     a:'工具调用失败的四级处理策略：①自动重试——网络超时类错误，等待1-3秒后重试1次；②降级策略——工具不可用时，Agent用备用工具或备用信息路径（比如查单API挂了，转为提示用户去APP查）；③主动告知用户——不要让用户看着AI"卡住"，应该在3秒内告知"我正在查询，系统响应稍慢"；④彻底失败时的兜底——工具连续失败2次后，Agent应主动说"当前系统暂时无法处理，我帮您转接人工"，不要陷入死循环。产品设计关键点：每个工具调用设置超时（建议3-5秒），超时即触发降级；整个ReAct循环设置最大步骤数（建议5-8步），防止无限循环；工具失败日志必须告警，因为这往往是系统故障的早期信号。'},
+    {q:'从产品经理角度，怎么评估一个AI Agent是否"聪明"和"可靠"？有哪些评估维度？',
+     a:'评估AI Agent的5个维度：①任务完成率——给定100个标准测试任务，能完全正确完成的比例（目标>80%）；②步骤效率——完成同一任务平均需要几步工具调用（步骤越少越好，过多说明推理低效）；③错误恢复能力——面对工具失败/用户输入错误/信息不完整时，能否优雅处理而不崩溃；④边界识别——遇到超出能力范围的任务时，能否及时说"我做不到"而非瞎操作（防止误操作是关键）；⑤解释性——能否用简单语言告诉用户"我正在做什么、为什么这么做"，减少黑盒感。评估方法：构建标准化测试集（覆盖正常路径+异常路径+边界情况），每次版本升级前跑一遍，设置最低通过分数线。'},
+    {q:'Multi-Agent系统中，如何设计Agent之间的协作协议和任务分配机制？',
+     a:'Agent协作协议设计的三个核心问题：①谁负责任务分配（Orchestrator）——建议设计一个专门的调度Agent，根据任务类型（查询类/操作类/情感类）动态分配给最合适的执行Agent，而非固定路由；②消息传递格式——Agent之间必须使用结构化消息格式（JSON），而非自然语言，避免信息损耗和歧义；③失败传播控制——当子Agent失败时，Orchestrator需要决定是"重试→降级→终止"，不能让单个Agent失败导致整个系统瘫痪。实际落地建议：从"分布式"转到"集中式"——不要一开始就搞复杂的P2P通信，先用一个Orchestrator+多个执行Agent的星形架构，足够应对80%的复杂场景。Dify的Workflow可以作为这个Orchestrator的低代码实现起点。'},
+  ],
+  'iq6': [
+    {q:'知识库运营是个持续性工作，如何设计一套可持续的知识库维护工作流？',
+     a:'知识库维护的"三环"工作流：①日常环（每日）——自动收集"未命中查询"（用户问了但AI没找到答案的问题）>50条触发运营审核；AI质检发现的低置信度回答自动进入待补充队列；②周环（每周）——运营人员处理队列中积压的知识缺口，批量补充/更新；对高频错误答案做根因分析并修复；③月环（每月）——全量审核知识库，按更新时间排序，超过30天未更新的政策类/规则类内容逐条确认是否有效；进行全量召回率测试，跟踪知识库健康指数。工具设计建议：在运营后台设计一个"知识库待办列表"，每条待办显示：触发场景、用户原话、建议补充内容草稿（AI预生成），运营人员只需确认/修改/拒绝，大幅降低维护成本。'},
+    {q:'当知识库里有100个问题，实际上只有20个被频繁用到，应该如何优化？',
+     a:'基于频率的知识库分层管理——核心思路是"20-80法则"：①统计召回热力图——对每个知识条目统计被召回次数，区分Hot（月召回100次以上）/Warm（10-100次）/Cold（10次以下）；②对Hot条目精雕细琢——这20%的内容影响80%的用户体验，重点优化答案质量、分块方式、关键词覆盖，甚至考虑做Fine-tuning；③对Cold条目重新评估——低频条目可能是过期内容（下线处理）或用户真正不关心的内容（降低优先级），减少知识库噪声；④建立优先级索引——检索时给Hot条目加权重加成，提升高频问题的响应速度和准确率。产品指标：目标是让Top 20%知识覆盖90%用户咨询量，这是知识库"健康度"的核心指标。'},
+    {q:'如何设计AI客服知识库的权限管理体系？不同角色应该有什么权限？',
+     a:'权限体系建议分为4个角色：①超级管理员（产品/技术负责人）——可以修改知识库架构、权重配置、删除任何内容、发布生产版本；②运营编辑——可以新增/修改知识条目，但修改的内容进入审核队列，不能直接生效；③业务审核员（客服主管）——审核运营编辑的修改，可以发布非敏感内容；④只读用户——可以查看知识库内容和召回测试，但不能修改。敏感内容控制：涉及金额、承诺、法律风险的内容，必须经过超级管理员审批才能发布；设计"版本快照"功能，任何更改都可以一键回滚。日志审计：所有修改操作记录操作人和时间，生产事故发生时可以快速溯源。'},
+  ],
+  'iq7': [
+    {q:'AI质检系统上线初期，数据量不足，置信度低，如何启动？有没有冷启动策略？',
+     a:'冷启动三步走：①借力人工质检标准——把现有的人工质检评分表（如果有）直接翻译成AI质检的评分规则，先用规则引擎（关键词检测+模板匹配）替代AI打分，快速验证评分逻辑；②小样本微调——收集100-200条人工已标注的会话，用于校准AI质检评分（不需要完整Fine-tuning，Prompt few-shot即可），使AI打分与人工评分相关性>0.8；③从单一维度切入——不要一开始就做全维度评分，先只做"合规性检测"（最容易定义规则），上线后逐步扩展到服务规范、问题解决率等维度。快速验证：每天抽100条AI质检结果，人工确认准确率，目标2周内达到85%，未达标则调整规则/阈值再测试。'},
+    {q:'智能质检发现某客服人员问题解决率长期偏低，产品如何支持后续的改进闭环？',
+     a:'质检发现问题只是第一步，真正价值在于驱动改善的闭环设计：①数据可视化——在客服主管后台展示每人的问题解决率趋势图，对比团队平均值，让管理者有"镜子"；②根因下钻——点击某个客服的低分记录，可以直接查看原始会话，定位是知识不足、话术问题还是操作失误；③针对性培训推荐——系统自动识别错误类型（话术/知识/操作），推送对应的培训材料或SOP；④改善追踪——设置"改善目标"并跟踪改善进度，每周给客服人员发送个人质检周报；⑤激励机制——质检高分与绩效挂钩，质检分数持续提升有奖励标记，形成正向激励。产品原则：质检数据必须有透明规则，被质检人员应该能看到自己的评分细节和扣分原因，否则会引发不信任和抵制。'},
+    {q:'质检系统的打分结果本身怎么保证准确性？如何避免"AI质检错误"带来的误伤？',
+     a:'防误伤的三层机制：①置信度控制——AI质检对每条评分给出置信度，高置信度（>0.9）的结果直接记录，低置信度（<0.7）的结果标记为"待人工复核"，不直接入绩效；②抽样验证机制——每天自动随机抽取20条AI质检结果，由有经验的质检员人工复核，持续监控AI质检准确率（目标>90%），低于阈值自动停用AI质检并告警；③申诉通道——客服人员可以对质检结果发起申诉，系统会触发人工复核，正确申诉率反馈到AI质检模型持续优化；④灰度期过渡——AI质检上线前3个月设为"仅供参考"模式，不影响绩效考核，收集数据和反馈，3个月后数据证明准确率稳定才纳入绩效。'},
+  ],
+  'iq8': [
+    {q:'"Badcase四分法"具体是怎么分类的？每类应该对应什么优化动作？',
+     a:'Badcase四分法是客服AI质量分析的核心工具，具体分类：①意图错误（Intent Error）——AI理解了错误的意图，导致答非所问。优化动作：增加意图训练样本、调整意图置信度阈值、改进意图分类Prompt；②知识错误（Knowledge Error）——意图理解正确，但知识库里没有正确答案或答案过期。优化动作：补充/更新知识库、优化分块策略、引入Rerank；③推理错误（Reasoning Error）——意图和知识都对，但LLM推理逻辑出错（典型：多条件组合判断）。优化动作：增加CoT推理步骤、加入few-shot示例、对高风险推理场景直接转人工；④表达错误（Expression Error）——意图、知识、推理都对，但语言表达不符合要求（话术生硬、不礼貌、格式错误）。优化动作：优化System Prompt的风格约束、增加输出格式规范。分析频率：每周至少分析50条Badcase，按此四分法分类，确认各类比例，优先攻最多的那类。'},
+    {q:'在没有充足标注数据的情况下，如何快速做出有说服力的Badcase分析报告？',
+     a:'小样本高效分析策略：①战略性采样——不要随机抽样，从"差评会话"和"转人工会话"中采样（这些是质量最差的，价值最高），100条精选样本比1000条随机样本分析价值更大；②结构化标注模板——为每条Badcase设计标准标注字段：用户原始问题、AI回答、期望正确回答、错误类型（四分法）、严重程度（低/中/高）、改进建议，每条标注耗时控制在2分钟以内；③快速聚类——标注完50条后，先归类，找出重复模式，重复出现3次以上的错误类型就值得专项改进；④量化包装——在报告里用"XX类错误占总Badcase的XX%，预计影响日咨询量的XX%"的表达方式，让数据有业务意义。交付标准：50条标注样本 + 四分法分布饼图 + Top 3高频问题根因分析 + 具体改进roadmap，这是一份完整可交付的Badcase分析报告。'},
+    {q:'AI效果优化做了很多轮之后，边际收益越来越低，怎么判断是否已经接近天花板？',
+     a:'判断优化天花板的三个信号：①连续2个迭代周期，核心指标（意图准确率/召回率/用户满意度）提升幅度<1%；②Badcase分析后发现，剩余错误都集中在"模型能力边界"类型（需要复杂逻辑推理、跨语境理解等），而非"工程可修复"类型；③人工质检员对剩余Badcase无法给出统一的"正确答案"（这说明问题本身就是模糊的，不是AI的问题）。应对策略选择：若是工程边界——考虑升级底座模型（换更强的LLM）或引入Fine-tuning；若是业务边界——接受这个局限，对这类问题直接设计转人工规则，而非继续优化AI；若是指标边界——重新审视指标本身是否合理（比如"问题解决率"可能被用户误用评分，不代表真实质量）。关键认知：追求100%准确是错误的目标，找到"AI处理"与"人工处理"的最优分工比例才是产品经理的职责。'},
+  ],
+  'iq9': [
+    {q:'"自助解决率>60%"这个目标是如何确定的？不同行业的基准有差异吗？',
+     a:'60%是行业通行的初期目标，背后逻辑：传统纯人工客服中，约30-40%的咨询是简单重复问题（查物流、查余额、改地址），可以100%由AI处理；另有20-30%是中等复杂问题，AI可以辅助处理。合计50-70%是合理的初期目标。行业差异确实存在：电商标准化（退换货流程固定）——AI自助率可达70-80%；金融/保险（合规要求高、问题复杂）——初期目标通常设50-60%；医疗健康（敏感度高）——初期目标可低至30-40%；游戏/娱乐（年轻用户接受度高、问题类型简单）——可达80%以上。建议：不要直接套用行业平均值，先分析自己业务的问题类型分布，把问题分成"可标准化"和"需判断"两类，可标准化问题的比例就是你的理论上限。'},
+    {q:'CSAT（客户满意度）分数如何有效收集？如何防止数据失真？',
+     a:'CSAT失真的三大风险：①回复率偏低（通常5-15%）——只有极端满意或极端不满意的用户才愿意打分，中间大多数不反馈；②时机偏差——问卷弹出时机影响评分（对话刚结束时评分高于次日回忆评分）；③AI同情效应——有些用户知道是AI时，会给更高分（不忍心给AI打低分）或更低分（预设偏见）。减少失真的方法：①分层采样：每天随机抽取不同时段、不同意图类型的会话进行CSAT推送，而非全量推送；②后验证：对低分会话进行人工核实，确认是真实不满还是误评；③设计2个问题：一问整体满意度（1-5分），二问具体原因（多选），后者比数字更有诊断价值；④基准对比：AI CSAT每月与人工组对比，监控差距趋势，差距缩小说明AI在改善。'},
+    {q:'如果"自助解决率"和"用户满意度"出现背离（解决率高但满意度低），说明什么问题？怎么处理？',
+     a:'"解决率高、满意度低"是比较危险的信号，可能的根因：①"被迫成功"——用户问题在技术上被AI"关闭"了（比如对话达到最大轮数或用户停止回复），系统记录为已解决，但用户实际上没得到满意答案；②答案正确但体验差——答案内容对，但话术生硬、回答太长、格式难读，用户觉得不舒服；③问题理解偏差——AI理解的是字面意思，用户实际需求是情感安抚（投诉场景特别典型）；④重复咨询被误计为解决——用户同一个问题当天来问了3次，每次都被标记为"已解决"，但实际未解决。解决方案：①重新定义"自助解决率"——改为"7天内未复咨同类问题"才算真正解决（防止虚假解决率）；②引入"情感满意度"维度的CSAT设计；③增加"解决过程体验"评分，区分"答案对不对"和"过程爽不爽"。'},
+  ],
+  'iq10': [
+    {q:'设计"AI辅助工作台"时，最容易忽视哪些细节？有哪些反直觉的设计原则？',
+     a:'最容易忽视的3个细节：①AI推荐不应该"强迫"客服——AI给出话术推荐后，客服应该能一键采用、修改后采用、或者无视，不能让AI成为客服的"思考代替品"，否则遇到AI推错时客服也跟着错；②信息展示要"分层"而非"堆叠"——把"最重要的信息"（用户情绪状态/订单核心数据/推荐话术）放在视觉最突出位置，历史会话等辅助信息折叠起来，防止信息过载导致客服反应变慢；③"转接上下文"比任何功能都重要——AI转人工时，人工工作台必须展示完整的AI对话历史和"AI已尝试的方案"，否则客服需要重复询问用户，体验比没有AI更差。反直觉原则：让客服保持"主体感"，AI是助手而非决策者；最好的AI辅助是让客服感觉"有人在帮我查资料"，而不是"系统在控制我说什么"。'},
+    {q:'人工客服如何参与AI的"训练"和"改善"？如何设计低成本的人工标注机制？',
+     a:'低成本人工标注的三个设计原则：①标注嵌入工作流——不要让客服专门打开标注系统，而是在处理完一个会话后，直接在工作台上弹出"AI在这次对话中哪里没做好？"的一键反馈入口，选项：[意图理解错] [答案不对] [话术太生硬] [其他]，3秒完成；②设计"纠错"比"打分"更有价值——让客服直接修改AI的错误答案（提供"更好的回答是..."输入框），这比简单点赞/踩提供了10倍以上的改善信息；③建立激励机制——标注行为与绩效奖励轻度绑定（比如每月标注50条以上解锁奖金），但不要过度量化（避免刷量）。数据流转：人工标注的纠错数据，每周自动汇总→触发知识库更新review→优质纠错样本进入few-shot库，形成完整的改善飞轮。'},
+    {q:'AI化后，如果客服团队担心被裁员而抵制使用AI工具，产品应该怎么应对？',
+     a:'这是AI客服项目落地最常被低估的人际阻力，产品经理需要主动介入：①重新定义角色价值——不要说"AI会取代XX%的工作"，而是强调"AI处理了80%的重复问题，你们可以专注在高价值客户身上，平均处理的客户价值更高"；②设计能体现人工价值的指标——不再单纯看"人均处理量"，增加"复杂问题解决率""高价值客户保留率"等指标，让客服能看到自己的新价值；③建立新晋升通道——设立"AI训练师""知识库运营专员"等新岗位，让有意愿的客服转型，而非直接裁员；④透明沟通进展——定期（每月一次）向客服团队展示AI能力现状，明确"AI还不能做什么"，消除恐惧来源于未知的焦虑。本质：客服对AI的接受度，是AI客服项目能否成功落地的关键变量，产品经理应该把"内部用户（客服）的使用体验"当成和"外部用户满意度"同等重要的指标。'},
+  ],
+  'iq11': [
+    {q:'如何定义和实现"主动服务"？从被动问答到主动触达的产品设计思路是什么？',
+     a:'主动服务的三个层次：①事件触发型主动服务——监控业务事件（物流延迟/库存不足/到期提醒），在用户"可能会产生问题"之前主动推送。产品实现：在业务事件系统和客服系统之间建立Trigger规则引擎，当订单物流超过预估时间2小时时，自动推送"您的物流稍有延迟，我们正在跟进，预计XX点前送达"；②预测型主动服务——基于用户历史行为预测可能的问题（买了同款产品的用户，30%会在第3天问使用教程），提前推送。需要埋点数据和简单的分群模型；③个性化主动服务——对高价值用户（VIP/大客户）在业务节点（续约前/出行前一天）主动联系，这是情感连接而非纯效率工具。落地建议：先从"事件触发型"开始，规则最清晰、效果最可量化；主动服务必须给用户"关闭"选项（不要骚扰），否则满意度反降。'},
+    {q:'AI客服积累的数据如何转化为产品改进的洞察？数据到洞察的具体流程是什么？',
+     a:'数据→洞察→行动的完整链路：①数据采集层——每次对话需要埋点的核心字段：用户原始问题文本、意图分类结果、置信度、是否触发转人工、用户满意度评分、解决是否成功、用户在问这个问题前的行为路径（刚下单/刚看过物流/刚收到货）；②分析层——每周运行三个分析：a.高频未解决问题TOP 20（这是产品痛点清单）；b.转人工前用户问了几次（超过3次说明AI理解差或问题复杂度超出AI能力）；c.特定渠道/时段的异常咨询量（可能对应业务问题）；③洞察到行动——建立"问题→洞察→owner→deadline"的需求追踪看板，高频问题的洞察直接输入产品roadmap评审会议；④量化验证——改进上线后，用控制变量法（A/B测试）验证该问题的咨询量是否下降。'},
+    {q:'当AI客服的数据积累已经足够，如何进入"个性化服务"阶段？需要哪些技术和产品条件？',
+     a:'进入个性化服务的三个前提条件：①用户识别率——必须能将咨询用户与业务账号关联（登录用户 > 手机号识别 > cookie），匿名用户无法做有意义的个性化；②数据积累量——每个用户至少需要3-5次历史交互，才能形成有效的用户画像；③实时调用能力——对话时能够实时查询用户历史（意图偏好、VIP等级、历史问题类型、情绪倾向），延迟需要<100ms不影响对话体验。个性化的渐进式实现：第一步，"分层服务"（VIP/普通/新用户不同策略，最简单）→第二步，"历史感知"（知道用户上次问了什么，避免重复询问）→第三步，"偏好记忆"（记住用户偏好的沟通风格）→第四步，"行为预测"（基于当前行为预测用户意图，提前准备答案）。技术门槛最低的起点：先实现"用户VIP等级识别"，对高价值用户优先转接人工，这是个性化服务的最简可行版本，落地成本最低。'},
+  ],
+  'iq12': [
+    {q:'面对VP的质疑，如果你的改进路径需要3周，但VP认为1周就该解决，如何处理这个分歧？',
+     a:'不要直接反驳VP的时间判断，要把分歧转化为信息补充：①先确认VP的期待和压力来源——"您提到1周，是否有外部压力（大客户投诉/监管要求）我需要了解？"这往往会揭示VP实际需要的不是"全面修复"而是"阶段性风险控制"；②重新定义"解决"——把3周方案拆成：第1周：高风险问题临时转人工（止血，客户感知改善80%）+ 第2-3周：根本修复（知识库更新+验证）。给VP选择"你希望先止血还是一步到位？"；③展示风险——1周强行修复的风险："在没有充分测试的情况下发布修改，可能引入新的错误，反而扩大投诉范围"——让VP了解快速行动的代价；④主动承担责任感——"我会每天给你更新进展，有任何超预期情况第一时间通知你"，VP最担心的往往是信息不透明，而非时间本身。'},
+    {q:'如果这次AI效果差是因为需求评估阶段就估算过于乐观，你应该在汇报中如何处理？',
+     a:'自我复盘的汇报策略——诚实但建设性：①不要回避——如果原因是"当初需求评估乐观"，向VP隐瞒只会损害长期信任，坦诚反而能建立可信度；②用"我们学到了什么"框架代替"我错在哪里"框架——"在这个项目里，我们验证了一个假设：知识库冷启动期，数据质量比数据量更重要。这个认知让我们下一个项目可以更准确地评估工期"；③提出流程改进——"基于这次经验，我建议未来AI项目在立项时增加一个'知识库健康度评估'阶段，避免类似偏差"；④展示数字——不要只说"我们学到了教训"，要展示"改进后的方案在内测中已经达到了XX%，比原来高了XX%"，让VP看到实质进展。本质：VP最关心的不是责任归属，而是"这个人能不能解决问题、未来能不能管控风险"。'},
+    {q:'产品经理如何建立长期的"向上可信度"，让VP在下次类似情况主动给你空间而非紧盯？',
+     a:'建立向上可信度的四个习惯：①主动同步，而非等待询问——每周主动发一份简短的进展邮件（3段：本周完成/发现的风险/下周计划），让VP始终知道你在掌控局面；②承诺可兑现——只承诺你80%确定能完成的事，不要为了"听起来好"而过度承诺，一次失信需要10次准时兑现来弥补；③带着方案来反映问题——遇到问题第一时间告诉VP，但同时带2-3个解决方案选项，而非只抛出问题；④让VP的决策看起来英明——当VP接受了你的建议并取得成功时，在团队面前归功于VP（"VP的判断给了我们关键方向"），而非强调是自己的功劳。长期效果：当VP知道"你会主动告知问题+带着方案+不越权独自行动"，自然会给你更多自主空间，形成良性循环。'},
+  ],
+  'iq13': [
+    {q:'设计Multi-Agent系统时，如何防止Agent之间相互"推卸责任"，导致任务无人完成？',
+     a:'Multi-Agent中最常见的失败模式就是"责任空洞"——每个Agent都等待别人先行动，或者任务在Agent之间流转时悄悄丢失。防止方案：①明确Ownership机制——每个任务必须有且只有一个"主责Agent"（Primary Owner），其他Agent是"支援"角色；任务创建时就指定主责Agent，不能在多个Agent间漂移；②设计"交接回执"——当任务从Agent A传给Agent B时，系统必须记录"A发送了，B确认收到"的两步握手，任何一步超时都触发告警；③超时兜底规则——任务被某个Agent持有超过X秒未处理，自动回退到Orchestrator重新分配，不允许任务"卡死"在某个Agent；④全链路追踪——每个任务有唯一ID，可以追踪任务在各Agent之间的流转日志，任何Agent处理失败都有明确记录，而非静默丢失。'},
+    {q:'实际项目中，从单Agent升级到Multi-Agent系统，应该怎么做迁移？有哪些常见坑？',
+     a:'迁移的三个阶段：①分析阶段——先把当前单Agent的工作拆解成"自然步骤"，找出哪些步骤可以并行（不相互依赖），哪些步骤本质上是串行（前一步的输出是后一步的输入），只有并行步骤才值得拆分成独立Agent；②渐进迁移——不要一次性重构全部，先拆出"最独立"的一个能力（比如情感检测Agent），单独验证稳定后，再逐步接入调度框架；③双模运行——迁移期间保持单Agent作为fallback，Multi-Agent失败时自动降级到单Agent处理，稳定后再完全切换。常见坑：①Context丢失——Agent间传递时信息被截断，用结构化JSON传递必要上下文，而非自然语言转述；②延迟暴增——引入Multi-Agent后响应时间从2秒变8秒，要在架构设计阶段就做延迟预算（每个Agent最长允许多少毫秒）；③调试困难——多Agent问题排查复杂度指数级上升，必须从第一天就建立完整的日志和链路追踪系统。'},
+    {q:'当Multi-Agent系统在生产环境出现异常时，产品经理如何快速定位是哪个Agent的问题？',
+     a:'生产问题快速定位的三层工具：①业务层监控（产品经理能看懂）——监控每个Agent的"成功处理率"和"平均处理时长"，任何一个Agent的指标突然偏离基准线，大概率是问题所在；②请求链路追踪（需要工程师协作）——每个用户请求生成唯一TraceID，可以看到该请求经过了哪些Agent、每个Agent耗时多少、哪里出了错；③降级测试——临时把怀疑有问题的Agent切换为"直接转人工"模式，观察整体错误率是否下降，下降则确认是该Agent的问题。产品经理的职责分工：负责定义"什么叫异常"（阈值设置）、跟踪业务层指标、协调工程师排查，以及决定降级策略；不需要亲自查代码日志。建立"故障手册"——提前为每个Agent定义：正常范围是什么、超出范围的处置预案（降级/切换/告警通知谁），而不是等出了问题再临时决策。'},
+  ],
+  'iq14': [
+    {q:'"让AI客服使用自然语言，避免官方模板感"，具体来说如何在Prompt中实现？',
+     a:'五个去官方模板感的Prompt技巧：①去欢迎语——直接进入帮助，不用"您好！我是XXX智能助理，很高兴为您服务！请问有什么可以帮到您的？"，改成"好的，我来帮您查一下。"；②缩短句子长度——规定平均句长不超过15字，长句子是官方感的主要来源；③使用第一人称"我"而非"本系统"——"我来查一下您的订单"比"本系统正在为您查询订单信息"自然100倍；④允许简洁回应——不是每个回答都要面面俱到，用户问"快递到了吗"只需回答"您的快递今天下午预计送达，预计时间是X点到X点之间"，不需要加一堆解释；⑤情绪词适度使用——"好的""明白了""这个问题挺常见的，我来解释一下"这类连接词，让对话有人情味而不显得机械。测试方法：把AI的回答找5个人读，问他们"这句话像人说的还是系统说的"，收集直观反馈比任何技术指标都快。'},
+    {q:'如果AI在某次对话中犯了错误，如何设计"错误后的信任修复"流程？',
+     a:'错误发生后的信任修复四步：①立刻承认，不解释——不要说"这是因为系统数据未及时更新"，直接说"对不起，刚才我给了您错误的信息"，快速承认比解释原因更能挽回信任；②人工立即接手——错误发生后不要让AI继续尝试修复，立刻转接人工，同时告诉人工客服"AI刚才在XX问题上出了错，用户可能很沮丧"；③主动补偿提示——人工接手时，根据错误类型主动提供适当补偿（如果错误造成了实质损失），比如"作为补偿，我们为您申请了一张优惠券"；④事后跟踪——24小时后触发一次主动问候（短信/消息），确认问题已解决，展示对用户的持续关注。最重要的设计原则：错误发生的那个时刻是信任的关键节点，处理得好比从未出错更能建立深层信任；处理不好则会把一次小错误放大成永久流失。'},
+    {q:'不同年龄层和数字化程度的用户对AI客服的接受度差异很大，如何在产品设计上适配？',
+     a:'用户分层适配的设计策略：①默认模式设计——对所有用户，产品默认是"轻量AI辅助"（AI回答+随时转人工的显眼按钮），而非"全AI强制模式"；②渐进式信任建立——对首次使用AI客服的用户，第一次对话后主动说明"您随时可以选择人工服务，在右上角点击即可"，降低焦虑感；③识别抵制信号——用户在AI回答后立刻发"转人工""我要说人工""叫你们人来"等，应该立刻响应（<5秒）而非再给一次AI回复；④差异化渠道设计——对老年/不适应AI的用户群体，保持电话人工服务作为第一选项（而非AI优先），在这个渠道不强推AI；⑤选择权始终存在——任何页面、任何对话阶段，转人工的入口都应该清晰可见，不应该设计成需要多次点击才能找到。核心原则：用户的AI使用意愿是连续谱，不是非此即彼，产品应该支持用户在谱上的任意位置找到适合自己的方式。'},
+  ],
+  'iq15': [
+    {q:'"节省15人力，月均省9万"这个ROI计算，有哪些隐含假设？实际落地可能遇到什么挑战？',
+     a:'这个计算有3个关键隐含假设，每个都可能偏离现实：①假设客服人员可以真正减少——实际上很多公司AI上线后，客服人员是通过"自然减员"（不补充新人）而非主动裁员来实现人力节省的，因此短期内人力成本不会立刻下降；②假设AI自助解决率能持续维持——如果业务规则更新频繁但知识库维护跟不上，自助解决率可能6个月后回落，"节省"就是一次性的；③假设AI运营成本不增加——随着用量增大，API调用费用、运维成本、知识库运营人力成本会随之增长，有时吃掉40-50%的节省收益。落地挑战：人力调整涉及HR和法务（劳动合同）；AI系统本身需要1-2个专职运营，是隐性的新成本；业务快速变化期（大促/新业务）AI效果可能下滑，临时增加人工成本。'},
+    {q:'如何向非技术背景的VP或CEO呈现ROI，让他们真正相信这个数字？',
+     a:'让ROI可信的三个关键设计：①用"已知数据推导"而非"预估"——不要说"预计提升自助解决率至60%"，而是说"内测2周，100个真实用户，自助解决率62%，数据可查"；给决策层真实可验证的小规模数据，比任何预估模型都有说服力；②拆成可控的赌注——把全量投入改成分阶段："第一阶段，在XX业务线试点，投入X万，3个月验证ROI，达标再全量"，降低决策层的心理风险；③用他们语言里的类比——"这相当于每个月多了两个不需要工资的客服"，或"相当于每天处理量翻了一倍，但客服团队规模不变"；③展示对标案例——找2-3个同行业公司AI客服落地的公开数据（行业报告/新闻），让决策层看到"这是有先例的投资，不是赌博"。'},
+    {q:'ROI计算之外，AI客服项目还有哪些难以量化但对决策很重要的价值点？如何向决策层呈现？',
+     a:'四个难量化但高价值的非经济收益：①数据资产积累——AI客服每天积累成千上万条用户真实问题，这是了解用户需求、发现产品缺陷的"实时用户研究系统"，传统客服没有这个能力；②服务时间覆盖——AI可以提供24小时无间断服务，夜间/节假日也能响应，这对消费者投诉、电商大促等场景有重要价值，但很难折算成具体金额；③风险管控能力——智能质检全量覆盖可以实时发现合规风险（客服违规承诺、敏感话题），避免法律纠纷，这种"事故未发生"的价值几乎无法量化；④组织学习速度——知识库+质检系统让"最佳实践"可以快速复制到整个客服团队，新员工培训周期从2个月缩短到2周，但这个价值容易被忽视。向决策层呈现方式：制作一张"价值全景图"，左侧是可量化的ROI，右侧是四个非经济价值，配1-2个具体例子说明（比如"过去3个月，AI质检发现了X次违规承诺，避免了潜在投诉"），让决策层看到完整价值。'},
+  ],
+};
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+function getState(){
+  try{return JSON.parse(localStorage.getItem('aipmState')||'{}')}
+  catch(e){return {}}
+}
+function setState(k,v){
+  const s=getState(); s[k]=v; localStorage.setItem('aipmState',JSON.stringify(s));
+}
+function getChecked(){return getState().checked||{}}
+function setChecked(id,v){
+  const c=getChecked(); c[id]=v; setState('checked',c);
+}
+function getPortLinks(){return getState().portLinks||{}}
+function setPortLink(id,v){const p=getPortLinks();p[id]=v;setState('portLinks',p)}
+function getPortStatus(){return getState().portStatus||{}}
+function setPortStatus(id,v){const p=getPortStatus();p[id]=v;setState('portStatus',p)}
+function getIQStatus(){return getState().iqStatus||{}}
+function setIQStatus(id,v){const s=getIQStatus();s[id]=v;setState('iqStatus',s)}
+function getRadarScores(){return getState().radarScores||{ai:1,tool:1,biz:1,data:1,prod:1}}
+function setRadarScores(v){setState('radarScores',v)}
+function getRadarHistory(){return getState().radarHistory||[]}
+function addRadarHistory(entry){const h=getRadarHistory();h.push(entry);setState('radarHistory',h)}
+function getWeekNotes(){return getState().weekNotes||{}}
+function saveWeekNote(weekNum,text){const n=getWeekNotes();n['w'+weekNum]=text;setState('weekNotes',n)}
+
+// ═══════════════════════════════════════
+// CALCULATIONS
+// ═══════════════════════════════════════
+function getTotalTasks(){return WEEKS.reduce((a,w)=>a+w.tasks.length,0)}
+function getDoneTasks(){const c=getChecked();return WEEKS.reduce((a,w)=>a+w.tasks.filter(t=>c[t.id]).length,0)}
+function getWeekDone(wNum){const c=getChecked();const w=WEEKS.find(x=>x.w===wNum);return w?w.tasks.filter(t=>c[t.id]).length:0}
+function getPhaseTotal(ph){return WEEKS.filter(w=>w.ph===ph).reduce((a,w)=>a+w.tasks.length,0)}
+function getPhaseDone(ph){const c=getChecked();return WEEKS.filter(w=>w.ph===ph).reduce((a,w)=>a+w.tasks.filter(t=>c[t.id]).length,0)}
+function getCurrentWeek(){
+  const start=new Date(START_DATE);
+  const now=new Date(); now.setHours(0,0,0,0);
+  const diff=Math.floor((now-start)/(7*24*3600*1000));
+  return Math.min(Math.max(diff+1,1),24);
+}
+function getDaysLeft(){
+  const start=new Date(START_DATE);
+  const end=new Date(start); end.setDate(end.getDate()+180);
+  const now=new Date(); now.setHours(0,0,0,0);
+  return Math.max(0,Math.floor((end-now)/(24*3600*1000)));
+}
+function getDateWeek(dateStr){
+  if(!dateStr)return 1;
+  const start=new Date(START_DATE);
+  const d=new Date(dateStr);
+  if(isNaN(d.getTime()))return 1;
+  d.setHours(0,0,0,0);
+  const diff=Math.floor((d-start)/(7*24*3600*1000));
+  return Math.min(Math.max(diff+1,1),24);
+}
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+const PAGES={dash:'p-dash',weekly:'p-weekly',daily:'p-daily',res:'p-res',radar:'p-radar',portfolio:'p-portfolio',iq:'p-iq'};
+function nav(key){
+  Object.values(PAGES).forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('active')});
+  const pg=document.getElementById(PAGES[key]);if(pg)pg.classList.add('active');
+  document.querySelectorAll('.top-nav-item').forEach((btn,i)=>{
+    btn.classList.toggle('active',['dash','weekly','daily','res','radar','portfolio','iq'][i]===key);
+  });
+  if(key==='dash')updateDash();
+  if(key==='weekly'){renderWeekly();setTimeout(()=>{const cw=getCurrentWeek();const el=document.getElementById('wb-'+cw);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},80);}
+  if(key==='daily')renderDaily();
+  if(key==='res')renderRes();
+  if(key==='radar')renderRadar();
+  if(key==='portfolio')renderPortfolio();
+  if(key==='iq')renderIQ();
+}
+
+// ═══════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════
+function updateDash(){
+  const total=getTotalTasks(), done=getDoneTasks(), pct=total?Math.round(done/total*100):0;
+  document.getElementById('totalDone').textContent=done;
+  document.getElementById('totalBar').style.width=pct+'%';
+  document.getElementById('daysLeft').textContent=getDaysLeft();
+  const cw=getCurrentWeek();
+  document.getElementById('curWeek').textContent='W'+cw;
+  document.getElementById('weekDone').textContent=getWeekDone(cw);
+  const portDone=Object.values(getPortStatus()).filter(v=>v==='done').length;
+  document.getElementById('portDone').textContent=portDone;
+  [1,2,3].forEach(ph=>{
+    const t=getPhaseTotal(ph),d=getPhaseDone(ph),p=t?Math.round(d/t*100):0;
+    const bar=document.getElementById('ph'+ph+'bar');
+    const pctEl=document.getElementById('ph'+ph+'pct');
+    if(bar)bar.style.width=p+'%';
+    if(pctEl)pctEl.textContent=d+'/'+t+' ('+p+'%)';
+  });
+}
+
+// ═══════════════════════════════════════
+// WEEKLY PLAN
+// ═══════════════════════════════════════
+let weekFilter='all';
+function filterWeeks(f,btn){
+  weekFilter=f;
+  document.querySelectorAll('.week-filter .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderWeekly();
+}
+function renderWeekly(){
+  const c=getChecked();
+  const cw=getCurrentWeek();
+  const container=document.getElementById('weekAccordion');
+  if(!container)return;
+  const filtered=WEEKS.filter(w=>{
+    if(weekFilter==='1')return w.ph===1;
+    if(weekFilter==='2')return w.ph===2;
+    if(weekFilter==='3')return w.ph===3;
+    if(weekFilter==='undone'){const done=w.tasks.filter(t=>c[t.id]).length;return done<w.tasks.length;}
+    return true;
+  });
+  container.innerHTML=filtered.map(w=>{
+    const done=w.tasks.filter(t=>c[t.id]).length;
+    const pct=Math.round(done/w.tasks.length*100);
+    const isCur=w.w===cw;
+    const badge=w.ph===1?'ph1-badge':w.ph===2?'ph2-badge':'ph3-badge';
+    const phLabel=w.ph===1?'阶段一':w.ph===2?'阶段二':'阶段三';
+    const tasks=w.tasks.map(t=>{
+      const checked=!!c[t.id];
+      const tag=t.tag==='must'?'<span class="task-tag tag-must">必做</span>':t.tag==='pub'?'<span class="task-tag tag-pub">公开发布</span>':t.tag==='tool'?'<span class="task-tag tag-tool">工具实操</span>':'';
+      return `<div class="task-item">
+        <div class="task-cb${checked?' checked':''}" onclick="toggleTask('${t.id}',this)">${checked?'✓':''}</div>
+        <div class="task-text${checked?' done':''}">${t.text}${tag}</div>
+      </div>`;
+    }).join('');
+    return `<div class="week-block${isCur?' open':''}" id="wb-${w.w}">
+      <div class="week-header" onclick="toggleWeek(${w.w})">
+        <span class="week-badge ${badge}">${phLabel} W${w.w}</span>
+        ${isCur?'<span style="font-size:11px;background:#FF4D4F;color:#fff;padding:2px 6px;border-radius:4px">当前周</span>':''}
+        <span class="week-title">${w.title}</span>
+        <span class="week-prog">${done}/${w.tasks.length} (${pct}%)</span>
+        <span style="font-size:10px;color:var(--t4);margin:0 4px">${'█'.repeat(Math.round(pct/10))}${'░'.repeat(10-Math.round(pct/10))}</span>
+        <span class="week-chevron">▾</span>
+      </div>
+      <div class="week-body">
+        ${tasks}
+        <div class="week-deliver"><h4>📌 本周交付物</h4><p>${w.deliver}</p></div>
+        ${renderWeekNote(w.w)}
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleWeek(n){
+  const el=document.getElementById('wb-'+n);
+  if(el)el.classList.toggle('open');
+}
+function toggleTask(id,el){
+  const c=getChecked();
+  const newVal=!c[id];
+  setChecked(id,newVal);
+  el.classList.toggle('checked',newVal);
+  el.textContent=newVal?'✓':'';
+  const textEl=el.nextElementSibling;
+  if(textEl)textEl.classList.toggle('done',newVal);
+  showToast(newVal?'✅ 任务已完成！':'↩ 已取消完成');
+  updateWeekProg(id);
+  // sync dashboard counts without full re-render
+  const totalDone=getDoneTasks(),total=getTotalTasks();
+  const el2=document.getElementById('totalDone');if(el2)el2.textContent=totalDone;
+  const bar=document.getElementById('totalBar');if(bar)bar.style.width=(total?Math.round(totalDone/total*100):0)+'%';
+  const cw=getCurrentWeek();
+  const wd=document.getElementById('weekDone');if(wd)wd.textContent=getWeekDone(cw);
+  [1,2,3].forEach(ph=>{
+    const t=getPhaseTotal(ph),d=getPhaseDone(ph),p=t?Math.round(d/t*100):0;
+    const phbar=document.getElementById('ph'+ph+'bar');if(phbar)phbar.style.width=p+'%';
+    const pctEl=document.getElementById('ph'+ph+'pct');if(pctEl)pctEl.textContent=d+'/'+t+' ('+p+'%)';
+  });
+}
+function updateWeekProg(taskId){
+  const c=getChecked();
+  WEEKS.forEach(w=>{
+    const match=w.tasks.find(t=>t.id===taskId);
+    if(match){
+      const done=w.tasks.filter(t=>c[t.id]).length;
+      const pct=Math.round(done/w.tasks.length*100);
+      const header=document.querySelector(`#wb-${w.w} .week-prog`);
+      if(header)header.textContent=`${done}/${w.tasks.length} (${pct}%)`;
+    }
+  });
+}
+function renderWeekNote(weekNum){
+  const notes=getWeekNotes();
+  const text=notes['w'+weekNum]||'';
+  const isOpen=!!text;
+  return `<div class="week-note-area${isOpen?'':' closed'}">
+    <button class="week-note-toggle" onclick="toggleWeekNote(${weekNum})">📝 ${isOpen?'编辑':'添加'}备注</button>
+    <textarea class="week-note-textarea" id="wn-${weekNum}" placeholder="记录本周的学习想法、遇到的困难或灵感..." style="${isOpen?'':'display:none'}" oninput="autoSaveNote(${weekNum},this)">${text}</textarea>
+    <div class="week-note-saved" id="wns-${weekNum}">已保存 ✓</div>
+  </div>`;
+}
+function toggleWeekNote(weekNum){
+  const area=document.querySelector(`#wb-${weekNum} .week-note-area`);
+  if(!area)return;
+  const ta=area.querySelector('.week-note-textarea');
+  const isClosed=area.classList.contains('closed');
+  area.classList.toggle('closed');
+  if(isClosed&&ta){ta.style.display='block';ta.focus();}
+}
+let noteTimers={};
+function autoSaveNote(weekNum,textarea){
+  clearTimeout(noteTimers[weekNum]);
+  noteTimers[weekNum]=setTimeout(()=>{
+    const text=textarea.value;
+    saveWeekNote(weekNum,text);
+    textarea.classList.add('saved');
+    const saved=document.getElementById('wns-'+weekNum);
+    if(saved){saved.style.animation='none';setTimeout(()=>{saved.style.animation='fadeInOut 2s ease-in-out forwards'},10);}
+    setTimeout(()=>textarea.classList.remove('saved'),2000);
+  },300);
+}
+
+// ═══════════════════════════════════════
+// DAILY TRACKER
+// ═══════════════════════════════════════
+function renderDaily(){
+  const inp=document.getElementById('dailyDateInput');
+  if(!inp.value){
+    const now=new Date();
+    inp.value=now.toISOString().split('T')[0];
+  }
+  updateDailyContent(inp.value);
+  inp.onchange=function(){updateDailyContent(this.value)};
+}
+function updateDailyContent(dateStr){
+  if(!dateStr){return;}
+  const wn=getDateWeek(dateStr);
+  if(isNaN(wn)){return;}
+  const week=WEEKS.find(w=>w.w===wn);
+  const tag=document.getElementById('dailyWeekTag');
+  if(tag){
+    tag.textContent=`第${wn}周：${week?week.title:''}`;
+    tag.className='daily-week-tag '+(wn<=8?'ph1-badge':wn<=16?'ph2-badge':'ph3-badge');
+  }
+  const container=document.getElementById('dailyContent');
+  if(!container||!week)return;
+  const mustTasks=week.tasks.filter(t=>t.tag==='must');
+  const extraTasks=week.tasks.filter(t=>t.tag!=='must'&&t.tag!=='pub');
+  const pubTasks=week.tasks.filter(t=>t.tag==='pub');
+  const c=getChecked();
+  const mustHTML=mustTasks.length?mustTasks.map(t=>`
+    <div class="daily-item">
+      <div class="task-cb${c[t.id]?' checked':''}" onclick="toggleTask('${t.id}',this)" style="flex-shrink:0;margin-top:2px">${c[t.id]?'✓':''}</div>
+      <div class="task-text${c[t.id]?' done':''}">${t.text}<span class="time-badge">30min</span></div>
+    </div>`).join(''):'<div style="font-size:13px;color:var(--t3)">本周无"必做"标记任务，请从周计划中选1项完成</div>';
+  const extraHTML=extraTasks.map(t=>`
+    <div class="daily-item">
+      <div class="task-cb${c[t.id]?' checked':''}" onclick="toggleTask('${t.id}',this)" style="flex-shrink:0;margin-top:2px">${c[t.id]?'✓':''}</div>
+      <div class="task-text${c[t.id]?' done':''}">${t.text}</div>
+    </div>`).join('');
+  const pubHTML=pubTasks.map(t=>`
+    <div class="daily-item">
+      <div class="task-cb${c[t.id]?' checked':''}" onclick="toggleTask('${t.id}',this)" style="flex-shrink:0;margin-top:2px">${c[t.id]?'✓':''}</div>
+      <div class="task-text${c[t.id]?' done':''}">${t.text}</div>
+    </div>`).join('');
+  container.innerHTML=`
+    <div class="daily-must">
+      <h3>⚡ 今日必做（至少30分钟）</h3>
+      ${mustHTML}
+    </div>
+    ${extraHTML?`<div class="daily-extra"><h3>➕ 今日加餐（有余力再做）</h3>${extraHTML}</div>`:''}
+    ${pubHTML?`<div class="daily-brand"><h3>🖊️ 个人品牌（本周发布任务）</h3>${pubHTML}</div>`:''}
+    <div class="self-test-card">
+      <h3>📌 本周交付物提醒</h3>
+      <div style="font-size:13px;color:var(--pri-d)">${week.deliver}</div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════
+// RESOURCES
+// ═══════════════════════════════════════
+function renderRes(){
+  const catClass={AI原理:'cat-ai',工具实操:'cat-tool',客服业务:'cat-biz',数据分析:'cat-data',产品设计:'cat-prod',技术理解:'cat-ai',行业动态:'cat-biz'};
+  const tbody=document.getElementById('resTableBody');
+  if(tbody)tbody.innerHTML=RESOURCES.map(r=>`
+    <tr>
+      <td><span class="res-cat ${catClass[r.cat]||'cat-ai'}">${r.cat}</span></td>
+      <td><a class="res-link" href="${r.url}" target="_blank">${r.name}</a></td>
+      <td style="color:var(--t2)">${r.desc}</td>
+      <td style="color:var(--t3)">${r.phase}</td>
+      <td><span class="priority-star">${'★'.repeat(r.pri)}${'☆'.repeat(5-r.pri)}</span></td>
+    </tr>`).join('');
+  const toolGrid=document.getElementById('toolGrid');
+  if(toolGrid)toolGrid.innerHTML=TOOLS.map(t=>`
+    <div style="padding:14px;background:var(--bg);border-radius:var(--radius);border:1px solid var(--border)">
+      <div style="font-weight:700;font-size:13px;color:var(--t1);margin-bottom:4px">${t.name}</div>
+      <div style="font-size:11px;color:var(--pri);margin-bottom:6px;font-weight:600">${t.tag}</div>
+      <div style="font-size:12px;color:var(--t2)">${t.desc}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════
+// RADAR CHART
+// ═══════════════════════════════════════
+let radarChart=null;
+function renderRadar(){
+  const scores=getRadarScores();
+  const container=document.getElementById('sliderContainer');
+  // only rebuild sliders if not yet rendered (avoid losing slider drag state)
+  if(container&&!container.dataset.built){
+    container.dataset.built='1';
+    container.innerHTML=RADAR_DIMS.map(d=>`
+      <div class="slider-item">
+        <div class="slider-label">
+          <span>${d.label}<br><small style="color:var(--t3);font-weight:400">${d.desc}</small></span>
+          <span id="sv-${d.key}">${scores[d.key]||1}</span>
+        </div>
+        <input type="range" class="slider" min="1" max="10" value="${scores[d.key]||1}"
+          oninput="updateSlider('${d.key}',this.value)">
+      </div>`).join('');
+  }
+  // always reinit chart when switching to radar tab (canvas may have been hidden)
+  setTimeout(()=>initRadarChart(getRadarScores()),50);
+  renderRadarHistory();
+  renderSelfTests();
+}
+function initRadarChart(scores){
+  const canvas=document.getElementById('radarCanvas');
+  if(!canvas)return;
+  const data=RADAR_DIMS.map(d=>scores[d.key]||1);
+  if(radarChart){try{radarChart.destroy();}catch(e){}radarChart=null;}
+  radarChart=new Chart(canvas,{
+    type:'radar',
+    data:{
+      labels:RADAR_DIMS.map(d=>d.label),
+      datasets:[{
+        label:'当前能力',
+        data,
+        fill:true,
+        backgroundColor:'rgba(22,119,255,0.15)',
+        borderColor:'rgba(22,119,255,0.8)',
+        pointBackgroundColor:'#1677FF',
+        pointBorderColor:'#fff',
+        pointHoverBackgroundColor:'#fff',
+        pointHoverBorderColor:'#1677FF',
+        borderWidth:2,
+        pointRadius:5,
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:true,
+      plugins:{legend:{display:false}},
+      scales:{r:{
+        min:0,max:10,ticks:{stepSize:2,color:'#86909C',font:{size:10}},
+        pointLabels:{color:'#1D2129',font:{size:12,weight:'600'}},
+        grid:{color:'rgba(0,0,0,.06)'},
+        angleLines:{color:'rgba(0,0,0,.06)'},
+      }}
+    }
+  });
+}
+function updateSlider(key,val){
+  const scores=getRadarScores();
+  scores[key]=parseInt(val);
+  setRadarScores(scores);
+  const sv=document.getElementById('sv-'+key);
+  if(sv)sv.textContent=val;
+  if(radarChart){
+    radarChart.data.datasets[0].data=RADAR_DIMS.map(d=>scores[d.key]||1);
+    radarChart.update();
+  }
+}
+function saveRadar(){
+  const scores=getRadarScores();
+  const now=new Date().toLocaleDateString('zh-CN');
+  addRadarHistory({date:now,scores:{...scores}});
+  renderRadarHistory();
+  showToast('✅ 评分已保存！');
+}
+function renderRadarHistory(){
+  const history=getRadarHistory();
+  const container=document.getElementById('radarHistory');
+  if(!container)return;
+  if(!history.length){container.innerHTML='<div style="font-size:12px;color:var(--t3);margin-top:16px">暂无历史评分记录，点击"保存本次评分"开始记录成长轨迹</div>';return;}
+  container.innerHTML='<div style="font-size:13px;font-weight:600;color:var(--t2);margin-bottom:10px">📈 历史评分记录</div>'+
+    history.slice(-5).reverse().map(h=>`
+      <div class="history-item">
+        <div class="history-dot"></div>
+        <span>${h.date} — AI:${h.scores.ai} 工具:${h.scores.tool} 客服:${h.scores.biz} 数据:${h.scores.data} 产品:${h.scores.prod}</span>
+      </div>`).join('');
+}
+function renderSelfTests(){
+  const container=document.getElementById('selfTestList');
+  if(!container)return;
+  container.innerHTML=SELF_TESTS.map(t=>`
+    <div style="display:flex;gap:12px;padding:12px;background:var(--bg);border-radius:var(--radius);margin-bottom:8px;align-items:flex-start">
+      <span style="background:var(--pri);color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0">${t.month}</span>
+      <span style="font-size:13px;color:var(--t2)">${t.test}</span>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════
+// PORTFOLIO
+// ═══════════════════════════════════════
+function renderPortfolio(){
+  const links=getPortLinks(), status=getPortStatus();
+  const grid=document.getElementById('portGrid');
+  if(!grid)return;
+  grid.innerHTML=PORTFOLIO_ITEMS.map((p,i)=>{
+    const id='port-'+i;
+    const st=status[id]||'todo';
+    const stLabel=st==='done'?'已完成':st==='doing'?'进行中':'待开始';
+    const stClass=st==='done'?'ps-done':st==='doing'?'ps-doing':'ps-todo';
+    const phLabel=p.phase===1?'阶段一':p.phase===2?'阶段二':'阶段三';
+    const phColor=p.phase===1?'var(--ph1-t)':p.phase===2?'var(--ph2-t)':'var(--ph3-t)';
+    return `<div class="port-card">
+      <div class="port-status ${stClass}" onclick="cyclePortStatus('${id}',this)" style="cursor:pointer" title="点击切换状态">${stLabel}</div>
+      <div class="port-phase" style="color:${phColor}">${phLabel} · ${p.week}</div>
+      <div class="port-title">${p.title}</div>
+      <div class="port-desc">${p.desc}</div>
+      <input class="port-link-input" placeholder="填入作品链接（Notion/飞书/Github）" value="${links[id]||''}"
+        onchange="setPortLink('${id}',this.value)" onclick="event.stopPropagation()">
+      <div class="port-week">W${p.week} 交付</div>
+    </div>`;
+  }).join('');
+}
+function cyclePortStatus(id,el){
+  const cur=getPortStatus()[id]||'todo';
+  const next=cur==='todo'?'doing':cur==='doing'?'done':'todo';
+  setPortStatus(id,next);
+  el.textContent=next==='done'?'已完成':next==='doing'?'进行中':'待开始';
+  el.className='port-status '+(next==='done'?'ps-done':next==='doing'?'ps-doing':'ps-todo');
+  showToast('状态已更新');
+  updateDash();
+}
+
+// ═══════════════════════════════════════
+// INTERVIEW BANK
+// ═══════════════════════════════════════
+let iqFilter='all';
+function filterIQ(f,btn){
+  iqFilter=f;
+  document.querySelectorAll('.iq-filter .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderIQ();
+}
+function renderIQ(){
+  const iqStatus=getIQStatus();
+  // preserve open state before re-render
+  const openIds=new Set([...document.querySelectorAll('.iq-item.open')].map(el=>el.id.replace('iq-item-','')));
+  const catLabel={tech:'技术类',prod:'产品设计类',biz:'业务类'};
+  const catColor={tech:'cat-ai',prod:'cat-prod',biz:'cat-biz'};
+  const filtered=IQ.filter(q=>{
+    if(iqFilter==='tech')return q.cat==='tech';
+    if(iqFilter==='prod')return q.cat==='prod';
+    if(iqFilter==='biz')return q.cat==='biz';
+    if(iqFilter==='new')return !iqStatus[q.id]||iqStatus[q.id]==='new';
+    if(iqFilter==='ready')return iqStatus[q.id]==='ready';
+    return true;
+  });
+  const container=document.getElementById('iqList');
+  if(!container)return;
+  container.innerHTML=filtered.map((q,i)=>{
+    const st=iqStatus[q.id]||'new';
+    const stClass=st==='new'?'status-new':st==='prep'?'status-prep':'status-ready';
+    const stLabel=st==='new'?'未准备':st==='prep'?'准备中':'已就绪';
+    const isOpen=openIds.has(q.id);
+    const followups=IQ_FOLLOWUPS[q.id]||[];
+    const roundsHtml=followups.map((fu,ri)=>`
+      <div class="iq-round-item" id="iq-round-${q.id}-${ri}" onclick="event.stopPropagation();toggleRound('${q.id}',${ri})">
+        <div class="iq-round-header">
+          <span class="iq-round-label">追问${ri+1}</span>
+          <span class="iq-round-q">${fu.q}</span>
+        </div>
+        <div class="iq-round-a">${fu.a}</div>
+      </div>`).join('');
+    const followupHtml=followups.length?`
+      <div class="iq-followup-section" id="iq-fu-${q.id}" onclick="event.stopPropagation()">
+        <button class="iq-followup-toggle" onclick="toggleFollowups('${q.id}')">
+          🔍 深度追问 (${followups.length}轮) <span class="fu-arr">▾</span>
+        </button>
+        <div class="iq-rounds">${roundsHtml}</div>
+      </div>`:''
+    return `<div class="iq-item${isOpen?' open':''}" id="iq-item-${q.id}">
+      <div class="iq-idx">${i+1}</div>
+      <div class="iq-body" onclick="toggleIQ('${q.id}')">
+        <div class="iq-q">${q.q}</div>
+        <div class="iq-a">${q.a}${followupHtml}</div>
+        <div class="iq-meta">
+          <span class="iq-cat-tag ${catColor[q.cat]}">${catLabel[q.cat]}</span>
+          <select class="iq-status-sel" onclick="event.stopPropagation()" onchange="updateIQStatus('${q.id}',this.value)">
+            <option value="new" ${st==='new'?'selected':''}>未准备</option>
+            <option value="prep" ${st==='prep'?'selected':''}>准备中</option>
+            <option value="ready" ${st==='ready'?'selected':''}>已就绪</option>
+          </select>
+          <span class="iq-cat-tag ${stClass}" id="iq-stlabel-${q.id}">${stLabel}</span>
+        </div>
+      </div>
+      <div class="iq-chevron" onclick="toggleIQ('${q.id}')">▾</div>
+    </div>`;
+  }).join('');
+}
+// update IQ status without full re-render (preserves open state)
+function updateIQStatus(id,val){
+  setIQStatus(id,val);
+  const stClass=val==='new'?'status-new':val==='prep'?'status-prep':'status-ready';
+  const stLabel=val==='new'?'未准备':val==='prep'?'准备中':'已就绪';
+  const lbl=document.getElementById('iq-stlabel-'+id);
+  if(lbl){lbl.textContent=stLabel;lbl.className='iq-cat-tag '+stClass;}
+  showToast('状态已更新');
+}
+function toggleIQ(id){
+  const el=document.getElementById('iq-item-'+id);
+  if(el)el.classList.toggle('open');
+}
+function toggleFollowups(id){
+  const el=document.getElementById('iq-fu-'+id);
+  if(el)el.classList.toggle('expanded');
+}
+function toggleRound(iqId,roundIdx){
+  const el=document.getElementById('iq-round-'+iqId+'-'+roundIdx);
+  if(el)el.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  if(!t)return;
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  updateDash();
+  // set today's date in daily tracker
+  const inp=document.getElementById('dailyDateInput');
+  if(inp){inp.value=new Date().toISOString().split('T')[0];}
+  // pre-render weekly plan for faster first open
+  renderWeekly();
+  // auto-scroll to current week after a tick
+  setTimeout(()=>{
+    const cw=getCurrentWeek();
+    const el=document.getElementById('wb-'+cw);
+    if(el){
+      el.classList.add('open');
+      // only scroll if we're on the weekly page
+      if(document.getElementById('p-weekly').classList.contains('active')){
+        el.scrollIntoView({behavior:'smooth',block:'center'});
+      }
+    }
+  },100);
+});
+
+</script>
+</body>
+</html>
