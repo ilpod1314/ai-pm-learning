@@ -194,7 +194,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .iq-followup-section{margin-top:12px;border-top:1px dashed var(--border);padding-top:12px}
 .iq-followup-toggle{font-size:12px;color:var(--pri);background:var(--pri-l);border:1px solid var(--pri-l2);border-radius:20px;padding:4px 14px;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:6px}
 .iq-followup-toggle:hover{background:var(--pri-l2);border-color:var(--pri)}
-.iq-rounds{margin-top:10px;display:flex;flex-direction:column;gap:8px;display:none}
+.iq-rounds{margin-top:10px;flex-direction:column;gap:8px;display:none}
 .iq-followup-section.expanded .iq-rounds{display:flex}
 .iq-followup-section.expanded .iq-followup-toggle .fu-arr{transform:rotate(180deg)}
 .fu-arr{display:inline-block;transition:.2s}
@@ -242,7 +242,7 @@ button{cursor:pointer;border:none;background:none;font-family:inherit}
 .week-note-textarea{width:100%;min-height:80px;border:none;outline:none;background:transparent;font-family:inherit;font-size:13px;color:var(--t1);resize:vertical;padding:8px 0;margin-top:8px;border-bottom:1px solid var(--border);transition:.2s}
 .week-note-textarea:focus{border-bottom-color:var(--pri)}
 .week-note-textarea.saved{border-bottom-color:var(--suc)}
-.week-note-saved{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--suc);margin-top:8px;animation:fadeInOut 2s ease-in-out forwards;opacity:0}
+.week-note-saved{display:none;align-items:center;gap:4px;font-size:12px;color:var(--suc);margin-top:8px}
 @keyframes fadeInOut{0%{opacity:0}20%{opacity:1}80%{opacity:1}100%{opacity:0}}
 </style>
 </head>
@@ -774,7 +774,7 @@ const IQ_FOLLOWUPS = {
   ],
   'iq2': [
     {q:'除了引用溯源，如何从Prompt设计层面降低幻觉？有哪些可操作的写法？',
-     a:'五个可落地的Prompt反幻觉技巧：①约束输出范围——"只能基于以下文档回答，如果文档中没有相关信息，请回复：我没有找到相关信息，建议联系人工客服"；②拒绝未知——"对于你不确定的信息，用'我无法确认'而非猜测"；③数字/日期字段特殊处理——"涉及金额、日期、地址等具体数值，必须引用原文，不得改写或推断"；④Chain-of-Thought验证——让模型先推理"这个问题的答案在文档第X部分有/没有记录"，再生成回答；⑤Few-shot反例训练——在System Prompt中提供3-5个"这样回答是错误的"示例，帮助模型理解幻觉边界。最关键：以上技巧组合使用，单独使用一条效果有限。'},
+     a:'五个可落地的Prompt反幻觉技巧：①约束输出范围——"只能基于以下文档回答，如果文档中没有相关信息，请回复：我没有找到相关信息，建议联系人工客服"；②拒绝未知——"对于你不确定的信息，用\'我无法确认\'而非猜测"；③数字/日期字段特殊处理——"涉及金额、日期、地址等具体数值，必须引用原文，不得改写或推断"；④Chain-of-Thought验证——让模型先推理"这个问题的答案在文档第X部分有/没有记录"，再生成回答；⑤Few-shot反例训练——在System Prompt中提供3-5个"这样回答是错误的"示例，帮助模型理解幻觉边界。最关键：以上技巧组合使用，单独使用一条效果有限。'},
     {q:'如何建立一套可落地的幻觉监控系统？有哪些可量化的指标？',
      a:'幻觉监控体系的三个层次：①事前检测（生成时）——用规则检测输出中的关键字段（金额、日期、联系方式、SKU编号）是否能在知识库原文中找到对应字符串，找不到就标记为"待人工复核"；②事中监控（实时）——跟踪"低置信度响应率"（触发转人工的比例），异常上升说明知识库覆盖率下降；③事后分析（离线）——每日抽样用户差评会话，人工标注幻觉类型：a.知识幻觉（答案错误）b.格式幻觉（答案对但格式不符）c.过度推断（超出文档范围）。可量化指标：幻觉率（人工抽样标注中幻觉条数/总样本）目标<5%；关键字段匹配率（可自动化计算）目标>95%；低置信度转人工率目标5-15%（过低说明置信度阈值设太宽，过高说明知识库覆盖不足）。'},
     {q:'AI引用的文档来源是正确的，但用户仍然投诉答案有误，这是什么问题？怎么处理？',
@@ -856,7 +856,7 @@ const IQ_FOLLOWUPS = {
     {q:'面对VP的质疑，如果你的改进路径需要3周，但VP认为1周就该解决，如何处理这个分歧？',
      a:'不要直接反驳VP的时间判断，要把分歧转化为信息补充：①先确认VP的期待和压力来源——"您提到1周，是否有外部压力（大客户投诉/监管要求）我需要了解？"这往往会揭示VP实际需要的不是"全面修复"而是"阶段性风险控制"；②重新定义"解决"——把3周方案拆成：第1周：高风险问题临时转人工（止血，客户感知改善80%）+ 第2-3周：根本修复（知识库更新+验证）。给VP选择"你希望先止血还是一步到位？"；③展示风险——1周强行修复的风险："在没有充分测试的情况下发布修改，可能引入新的错误，反而扩大投诉范围"——让VP了解快速行动的代价；④主动承担责任感——"我会每天给你更新进展，有任何超预期情况第一时间通知你"，VP最担心的往往是信息不透明，而非时间本身。'},
     {q:'如果这次AI效果差是因为需求评估阶段就估算过于乐观，你应该在汇报中如何处理？',
-     a:'自我复盘的汇报策略——诚实但建设性：①不要回避——如果原因是"当初需求评估乐观"，向VP隐瞒只会损害长期信任，坦诚反而能建立可信度；②用"我们学到了什么"框架代替"我错在哪里"框架——"在这个项目里，我们验证了一个假设：知识库冷启动期，数据质量比数据量更重要。这个认知让我们下一个项目可以更准确地评估工期"；③提出流程改进——"基于这次经验，我建议未来AI项目在立项时增加一个'知识库健康度评估'阶段，避免类似偏差"；④展示数字——不要只说"我们学到了教训"，要展示"改进后的方案在内测中已经达到了XX%，比原来高了XX%"，让VP看到实质进展。本质：VP最关心的不是责任归属，而是"这个人能不能解决问题、未来能不能管控风险"。'},
+     a:'自我复盘的汇报策略——诚实但建设性：①不要回避——如果原因是"当初需求评估乐观"，向VP隐瞒只会损害长期信任，坦诚反而能建立可信度；②用"我们学到了什么"框架代替"我错在哪里"框架——"在这个项目里，我们验证了一个假设：知识库冷启动期，数据质量比数据量更重要。这个认知让我们下一个项目可以更准确地评估工期"；③提出流程改进——"基于这次经验，我建议未来AI项目在立项时增加一个\'知识库健康度评估\'阶段，避免类似偏差"；④展示数字——不要只说"我们学到了教训"，要展示"改进后的方案在内测中已经达到了XX%，比原来高了XX%"，让VP看到实质进展。本质：VP最关心的不是责任归属，而是"这个人能不能解决问题、未来能不能管控风险"。'},
     {q:'产品经理如何建立长期的"向上可信度"，让VP在下次类似情况主动给你空间而非紧盯？',
      a:'建立向上可信度的四个习惯：①主动同步，而非等待询问——每周主动发一份简短的进展邮件（3段：本周完成/发现的风险/下周计划），让VP始终知道你在掌控局面；②承诺可兑现——只承诺你80%确定能完成的事，不要为了"听起来好"而过度承诺，一次失信需要10次准时兑现来弥补；③带着方案来反映问题——遇到问题第一时间告诉VP，但同时带2-3个解决方案选项，而非只抛出问题；④让VP的决策看起来英明——当VP接受了你的建议并取得成功时，在团队面前归功于VP（"VP的判断给了我们关键方向"），而非强调是自己的功劳。长期效果：当VP知道"你会主动告知问题+带着方案+不越权独自行动"，自然会给你更多自主空间，形成良性循环。'},
   ],
@@ -995,6 +995,10 @@ function filterWeeks(f,btn){
   renderWeekly();
 }
 function renderWeekly(){
+  // Clear stale note timers from previous render to avoid ghost saves
+  Object.keys(noteTimers).forEach(k=>{clearTimeout(noteTimers[k]);delete noteTimers[k];});
+  // Preserve user-expanded weeks before re-render (like renderIQ preserves open questions)
+  const openWeeks=new Set([...document.querySelectorAll('.week-block.open')].map(el=>parseInt(el.id.replace('wb-',''))));
   const c=getChecked();
   const cw=getCurrentWeek();
   const container=document.getElementById('weekAccordion');
@@ -1020,7 +1024,8 @@ function renderWeekly(){
         <div class="task-text${checked?' done':''}">${t.text}${tag}</div>
       </div>`;
     }).join('');
-    return `<div class="week-block${isCur?' open':''}" id="wb-${w.w}">
+    const isWkOpen=isCur||openWeeks.has(w.w);
+    return `<div class="week-block${isWkOpen?' open':''}" id="wb-${w.w}">
       <div class="week-header" onclick="toggleWeek(${w.w})">
         <span class="week-badge ${badge}">${phLabel} W${w.w}</span>
         ${isCur?'<span style="font-size:11px;background:#FF4D4F;color:#fff;padding:2px 6px;border-radius:4px">当前周</span>':''}
@@ -1082,16 +1087,23 @@ function renderWeekNote(weekNum){
   return `<div class="week-note-area${isOpen?'':' closed'}">
     <button class="week-note-toggle" onclick="toggleWeekNote(${weekNum})">📝 ${isOpen?'编辑':'添加'}备注</button>
     <textarea class="week-note-textarea" id="wn-${weekNum}" placeholder="记录本周的学习想法、遇到的困难或灵感..." style="${isOpen?'':'display:none'}" oninput="autoSaveNote(${weekNum},this)">${text}</textarea>
-    <div class="week-note-saved" id="wns-${weekNum}">已保存 ✓</div>
+    <div class="week-note-saved" id="wns-${weekNum}" style="display:none">已保存 ✓</div>
   </div>`;
 }
 function toggleWeekNote(weekNum){
   const area=document.querySelector(`#wb-${weekNum} .week-note-area`);
   if(!area)return;
   const ta=area.querySelector('.week-note-textarea');
+  const btn=area.closest('.week-body')?.querySelector('.week-note-toggle');
   const isClosed=area.classList.contains('closed');
   area.classList.toggle('closed');
-  if(isClosed&&ta){ta.style.display='block';ta.focus();}
+  if(isClosed&&ta){
+    ta.style.display='block';ta.focus();
+    if(btn)btn.innerHTML='📝 收起备注';
+  } else if(ta){
+    ta.style.display='none';
+    if(btn)btn.innerHTML=`📝 ${ta.value.trim()?'编辑':'添加'}备注`;
+  }
 }
 let noteTimers={};
 function autoSaveNote(weekNum,textarea){
@@ -1101,7 +1113,13 @@ function autoSaveNote(weekNum,textarea){
     saveWeekNote(weekNum,text);
     textarea.classList.add('saved');
     const saved=document.getElementById('wns-'+weekNum);
-    if(saved){saved.style.animation='none';setTimeout(()=>{saved.style.animation='fadeInOut 2s ease-in-out forwards'},10);}
+    if(saved){
+      saved.style.display='inline-flex';
+      saved.style.opacity='0';
+      saved.style.animation='none';
+      setTimeout(()=>{saved.style.animation='fadeInOut 2s ease-in-out forwards';},10);
+      setTimeout(()=>{saved.style.display='none';saved.style.animation='none';},2100);
+    }
     setTimeout(()=>textarea.classList.remove('saved'),2000);
   },300);
 }
@@ -1166,7 +1184,7 @@ function updateDailyContent(dateStr){
 // RESOURCES
 // ═══════════════════════════════════════
 function renderRes(){
-  const catClass={AI原理:'cat-ai',工具实操:'cat-tool',客服业务:'cat-biz',数据分析:'cat-data',产品设计:'cat-prod',技术理解:'cat-ai',行业动态:'cat-biz'};
+  const catClass={'AI原理':'cat-ai','工具实操':'cat-tool','客服业务':'cat-biz','数据分析':'cat-data','产品设计':'cat-prod','技术理解':'cat-ai','行业动态':'cat-biz','实战教程':'cat-tool','社区资讯':'cat-biz'};
   const tbody=document.getElementById('resTableBody');
   if(tbody)tbody.innerHTML=RESOURCES.map(r=>`
     <tr>
@@ -1306,7 +1324,7 @@ function renderPortfolio(){
       <div class="port-title">${p.title}</div>
       <div class="port-desc">${p.desc}</div>
       <input class="port-link-input" placeholder="填入作品链接（Notion/飞书/Github）" value="${links[id]||''}"
-        onchange="setPortLink('${id}',this.value)" onclick="event.stopPropagation()">
+        oninput="setPortLink('${id}',this.value)" onclick="event.stopPropagation()">
       <div class="port-week">W${p.week} 交付</div>
     </div>`;
   }).join('');
@@ -1341,7 +1359,7 @@ function renderIQ(){
     if(iqFilter==='tech')return q.cat==='tech';
     if(iqFilter==='prod')return q.cat==='prod';
     if(iqFilter==='biz')return q.cat==='biz';
-    if(iqFilter==='new')return !iqStatus[q.id]||iqStatus[q.id]==='new';
+    if(iqFilter==='new')return !iqStatus[q.id]||iqStatus[q.id]==='new'||iqStatus[q.id]==='prep';
     if(iqFilter==='ready')return iqStatus[q.id]==='ready';
     return true;
   });
@@ -1387,13 +1405,18 @@ function renderIQ(){
     </div>`;
   }).join('');
 }
-// update IQ status without full re-render (preserves open state)
+// update IQ status — re-renders if a status filter is active so the item moves correctly
 function updateIQStatus(id,val){
   setIQStatus(id,val);
-  const stClass=val==='new'?'status-new':val==='prep'?'status-prep':'status-ready';
-  const stLabel=val==='new'?'未准备':val==='prep'?'准备中':'已就绪';
-  const lbl=document.getElementById('iq-stlabel-'+id);
-  if(lbl){lbl.textContent=stLabel;lbl.className='iq-cat-tag '+stClass;}
+  if(iqFilter==='new'||iqFilter==='ready'){
+    // re-render to apply filter (e.g. item moves out of "未准备" view when set to ready)
+    renderIQ();
+  } else {
+    const stClass=val==='new'?'status-new':val==='prep'?'status-prep':'status-ready';
+    const stLabel=val==='new'?'未准备':val==='prep'?'准备中':'已就绪';
+    const lbl=document.getElementById('iq-stlabel-'+id);
+    if(lbl){lbl.textContent=stLabel;lbl.className='iq-cat-tag '+stClass;}
+  }
   showToast('状态已更新');
 }
 function toggleIQ(id){
